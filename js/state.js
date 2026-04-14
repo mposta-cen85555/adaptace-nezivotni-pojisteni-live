@@ -21,13 +21,17 @@ export const bus = new EventBus();
    ========================================================================== */
 function generateRoomCode() {
   const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  const arr = new Uint8Array(6);
+  crypto.getRandomValues(arr);
   let code = '';
-  for (let i = 0; i < 6; i++) code += chars[Math.floor(Math.random() * chars.length)];
+  for (let i = 0; i < 6; i++) code += chars[arr[i] % chars.length];
   return code;
 }
 
 function generateId() {
-  return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+  const arr = new Uint8Array(8);
+  crypto.getRandomValues(arr);
+  return Date.now().toString(36) + Array.from(arr, b => b.toString(36)).join('').slice(0, 8);
 }
 
 const initialState = {
@@ -125,10 +129,14 @@ class Store {
   /** Update state and emit changes */
   set(path, value) {
     const keys = path.split('.');
+    const forbidden = ['__proto__', 'constructor', 'prototype'];
+    if (keys.some(k => forbidden.includes(k))) return;
     let obj = this._state;
     for (let i = 0; i < keys.length - 1; i++) {
+      if (!obj || typeof obj !== 'object') return;
       obj = obj[keys[i]];
     }
+    if (!obj || typeof obj !== 'object') return;
     obj[keys[keys.length - 1]] = value;
     bus.emit('state:change', { path, value });
     bus.emit(`state:${path}`, value);
