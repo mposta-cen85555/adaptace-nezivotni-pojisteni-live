@@ -1,1 +1,159 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Adaptační den: Neživotní pojištění – ČS</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
 
+  <!-- STICKY HEADER + NAV -->
+  <header class="site-header" role="banner">
+    <nav class="top-nav" aria-label="Hlavní navigace">
+      <span class="nav-brand">Adaptační den: NŽP</span>
+      <ul class="nav-links" role="list">
+        <li><a href="#hero">Úvod</a></li>
+        <li><a href="#timeline">Timeline</a></li>
+        <li><a href="#agenda">Agenda</a></li>
+        <li><a href="#zaver">Závěr</a></li>
+      </ul>
+      <div class="nav-controls">
+        <button id="btn-expand-all" class="btn btn-sm" aria-label="Rozbalit všechny bloky">Rozbalit vše</button>
+        <button id="btn-collapse-all" class="btn btn-sm" aria-label="Sbalit všechny bloky">Sbalit vše</button>
+        <label class="toggle-label">
+          <input type="checkbox" id="toggle-projection" role="switch" />
+          <span class="toggle-track"><span class="toggle-thumb"></span></span>
+          <span class="toggle-text">Promítací režim</span>
+        </label>
+        <label class="toggle-label">
+          <input type="checkbox" id="toggle-view" role="switch" />
+          <span class="toggle-track"><span class="toggle-thumb"></span></span>
+          <span class="toggle-text" id="view-label">Účastník</span>
+        </label>
+      </div>
+    </nav>
+    <div class="progress-bar-wrapper" aria-label="Pokrok dne">
+      <div class="progress-bar-track">
+        <div class="progress-bar-fill" id="progress-bar-fill" style="width:0%"
+             role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+      </div>
+      <span class="progress-label" id="progress-label">0 / 8 bloků splněno</span>
+    </div>
+  </header>
+
+  <main id="main-content">
+
+    <!-- HERO -->
+    <section id="hero" class="hero-section" aria-labelledby="hero-title">
+      <div class="container">
+        <div class="hero-content">
+          <div class="hero-badge-top">Interní vzdělávání · Česká spořitelna</div>
+          <h1 id="hero-title" class="hero-title">Adaptační den:<br>Neživotní pojištění</h1>
+          <p class="hero-subtitle">Facilitátorský nástroj pro lektora a účastníky prezenčního školení</p>
+          <p class="hero-goal">
+            Cílem dne je vybavit účastníky znalostmi produktů neživotního pojištění ČS,
+            schopností vytvořit nabídku v systému Hades a sebedůvěrou vést obchodní
+            rozhovor včetně reakce na námitky.
+          </p>
+          <div class="hero-active-badge" aria-label="80 procent času aktivně">
+            <span aria-hidden="true">⚡</span>
+            <strong>80 % času aktivně</strong>
+            <span class="hero-active-sub">– minimálně přednášení, maximálně praxe</span>
+          </div>
+          <nav class="hero-block-links" aria-label="Rychlý přechod na bloky">
+            <a href="#block-1" class="btn btn-outline">B1 09:00</a>
+            <a href="#block-2" class="btn btn-outline">B2 09:45</a>
+            <a href="#block-3" class="btn btn-outline">B3 10:45</a>
+            <a href="#block-4" class="btn btn-outline">B4 11:30</a>
+            <a href="#block-5" class="btn btn-outline">B5 12:45</a>
+            <a href="#block-6" class="btn btn-outline">B6 13:45</a>
+            <a href="#block-7" class="btn btn-outline">B7 14:45</a>
+            <a href="#block-8" class="btn btn-outline">B8 15:45</a>
+          </nav>
+        </div>
+      </div>
+    </section>
+
+    <!-- TIMELINE -->
+    <section id="timeline" class="timeline-section" aria-labelledby="timeline-title">
+      <div class="container">
+        <h2 id="timeline-title" class="section-title">Rychlý přehled dne</h2>
+        <div class="timeline-scroll" role="list" id="timeline-cards">
+          <!-- Generováno z app.js -->
+        </div>
+      </div>
+    </section>
+
+    <!-- AGENDA -->
+    <section id="agenda" class="agenda-section" aria-labelledby="agenda-title">
+      <div class="container">
+        <h2 id="agenda-title" class="section-title">Agenda dne</h2>
+        <div id="agenda-blocks">
+          <!-- Generováno z app.js -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ZÁVĚR -->
+    <section id="zaver" class="closing-section" aria-labelledby="closing-title">
+      <div class="container">
+        <h2 id="closing-title" class="section-title">Závěr dne a akční plán</h2>
+        <p class="closing-summary">
+          Dnes jste prošli 8 bloků zaměřených na finanční dopad škod a správný mindset,
+          orientaci v rizicích a produktech, rozlišení odpovědností, přechod na nabídku,
+          modelování v systému Hades, práci se stávajícími smlouvami, argumentaci
+          a námitky a závěrečnou reflexi.
+        </p>
+        <div class="key-skills">
+          <div class="skill-card">
+            <div class="skill-icon" aria-hidden="true">🏠</div>
+            <h3>Orientace v produktech</h3>
+            <p>Neživotního pojištění České spořitelny – parametry, rizika, rodiny klientů</p>
+          </div>
+          <div class="skill-card">
+            <div class="skill-icon" aria-hidden="true">💻</div>
+            <h3>Tvorba nabídky v Hades</h3>
+            <p>Modelování reálných nabídek, reakce na změnu zadání, práce v systému bez obav</p>
+          </div>
+          <div class="skill-card">
+            <div class="skill-icon" aria-hidden="true">🤝</div>
+            <h3>Obchodní rozhovor</h3>
+            <p>Přirozený přechod FIT → Hades, argumentace nad nabídkou, práce s námitkami</p>
+          </div>
+        </div>
+        <div class="action-plan-box">
+          <label class="action-plan-label" for="action-plan-input">
+            Co zítra použiji u klienta:
+          </label>
+          <textarea
+            id="action-plan-input"
+            class="action-plan-textarea"
+            rows="4"
+            placeholder="Buď konkrétní – jedno konkrétní chování, ne obecné přání. Např.: ‚Zeptám se každého klienta na nemovitost.'"
+            aria-describedby="action-plan-hint"
+          ></textarea>
+          <p id="action-plan-hint" class="input-hint">Konkrétnost je klíčem. Ne „budu lépe komunikovat", ale co přesně uděláš.</p>
+          <div class="action-plan-buttons">
+            <button id="btn-save-plan" class="btn btn-primary">Uložit akční plán</button>
+            <button id="btn-clear-plan" class="btn btn-outline">Smazat</button>
+          </div>
+          <div id="saved-plan-display" class="saved-plan" hidden>
+            <strong>Uložený akční plán:</strong>
+            <p id="saved-plan-text"></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer" role="contentinfo">
+    <div class="container">
+      <p>© 2025 Česká spořitelna – Adaptační den: Neživotní pojištění · Interní vzdělávací nástroj</p>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
