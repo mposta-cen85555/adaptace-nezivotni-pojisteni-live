@@ -59,18 +59,18 @@ window._joinRoom = () => {
   const name = nameInput.value.trim();
   if (!code || code.length < 4) { codeInput.focus(); return; }
   if (!name) { nameInput.focus(); return; }
-  const teamId = window._selectedTeam || null;
+  const teamId = _selectedTeam || null;
   roomActions.joinRoom(code, name, teamId);
   initChannel(code);
   render();
 };
 
+let _selectedTeam = null;
 window._selectTeam = (btn, teamId) => {
   document.querySelectorAll('.join-team-btn').forEach(b => b.classList.remove('is-selected'));
   btn.classList.add('is-selected');
-  window._selectedTeam = teamId;
+  _selectedTeam = teamId;
 };
-window._selectedTeam = null;
 
 window._startSession = () => {
   roomActions.startSession();

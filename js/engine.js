@@ -39,6 +39,16 @@ export function formatTimer(s) {
   return `${m}:${sec}`;
 }
 
+/** Fisher-Yates shuffle — returns a new shuffled array */
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
 /* ==========================================================================
    ACTIVITY ENGINE — phase state machine
    Phases: idle → intro → instructions → live → countdown → reveal → results → reflection → idle
@@ -1005,13 +1015,12 @@ class MatchingTemplate extends BaseTemplate {
 
   renderMatchLive(activity) {
     const pairs = engine.getContentData(activity.config.pairs);
-    const allCards = [];
+    const cards = [];
     (pairs || []).forEach((p, i) => {
-      allCards.push({ id: `e${i}`, text: p.event, pairId: i, type: 'event' });
-      allCards.push({ id: `i${i}`, text: p.impact, pairId: i, type: 'impact' });
+      cards.push({ id: `e${i}`, text: p.event, pairId: i, type: 'event' });
+      cards.push({ id: `i${i}`, text: p.impact, pairId: i, type: 'impact' });
     });
-    // Shuffle
-    for (let i = allCards.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [allCards[i], allCards[j]] = [allCards[j], allCards[i]]; }
+    const allCards = shuffle(cards);
 
     return `
       <div class="arena-center">

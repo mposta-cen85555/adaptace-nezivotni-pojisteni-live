@@ -129,15 +129,22 @@ class Store {
   /** Update state and emit changes */
   set(path, value) {
     const keys = path.split('.');
-    const forbidden = ['__proto__', 'constructor', 'prototype'];
-    if (keys.some(k => forbidden.includes(k))) return;
+    const forbidden = new Set(['__proto__', 'constructor', 'prototype']);
+    if (keys.some(k => forbidden.has(k))) return;
     let obj = this._state;
     for (let i = 0; i < keys.length - 1; i++) {
       if (!obj || typeof obj !== 'object') return;
+      if (!Object.prototype.hasOwnProperty.call(obj, keys[i])) return;
       obj = obj[keys[i]];
     }
     if (!obj || typeof obj !== 'object') return;
-    obj[keys[keys.length - 1]] = value;
+    const finalKey = keys[keys.length - 1];
+    if (forbidden.has(finalKey)) return;
+    if (!Object.prototype.hasOwnProperty.call(obj, finalKey) && !(finalKey in obj)) {
+      // Only allow setting keys that already exist in the state shape
+      return;
+    }
+    Object.defineProperty(obj, finalKey, { value, writable: true, enumerable: true, configurable: true });
     bus.emit('state:change', { path, value });
     bus.emit(`state:${path}`, value);
   }
