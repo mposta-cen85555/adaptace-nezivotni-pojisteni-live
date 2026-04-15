@@ -2,7 +2,7 @@
  * views.js — All view renderers: Landing, Join, Lobby, Host, Participant, Display, Arena
  * Per-block arena archetypes with differentiated visual identities
  */
-import { agendaData, getBlockActivities, getRecommendedActivity, activities, arenaArchetypes, heroVisuals, marketData, insightData, blockIllustrations, competitorData, contentData } from './data.js';
+import { agendaData, getBlockActivities, getRecommendedActivity, activities, arenaArchetypes, heroVisuals, marketData, insightData, blockIllustrations, competitorData, contentData, activityThumbnails, visualAssets } from './data.js';
 import { store, bus, roomActions, timerActions, selectors } from './state.js';
 import { engine, icons, formatKc, formatTimer } from './engine.js';
 
@@ -259,9 +259,10 @@ function renderActivityPicker(blockId, isHost) {
 
   const cards = acts.map(a => {
     const icon = templateIcons[a.template] || icons.arrowRight;
+    const thumb = activityThumbnails[a.template] || '';
     return `
       <div class="activity-pick-card ${a.recommended ? 'is-recommended' : ''}" style="--arena-accent:${archetype.accent || 'var(--color-accent)'}" onclick="window._startActivity('${a.id}')">
-        <div class="activity-pick-icon">${icon}</div>
+        ${thumb ? `<div class="activity-pick-thumb">${thumb}</div>` : `<div class="activity-pick-icon">${icon}</div>`}
         <div class="activity-pick-name">${a.name}</div>
         <div class="activity-pick-brief">${a.brief}</div>
         <div class="activity-pick-type">${a.template}</div>
@@ -321,6 +322,29 @@ function renderInsightPanel(blockId) {
         ` : ''}
         ${brief.source ? `<div class="insight-source">Zdroj: ${brief.source}</div>` : ''}
       </div>
+    </div>
+  `;
+}
+
+/* ==========================================================================
+   DATA BRIEF STRIP — always-visible key stats above activity picker
+   ========================================================================== */
+function renderDataBrief(blockId) {
+  const data = insightData[`block${blockId}`];
+  if (!data || !data.dataBrief || !data.dataBrief.stats) return '';
+  const stats = data.dataBrief.stats.slice(0, 3);
+  if (!stats.length) return '';
+  const archetype = arenaArchetypes[blockId] || {};
+
+  return `
+    <div class="data-brief-strip" style="--arena-accent:${archetype.accent || 'var(--color-accent)'}">
+      ${stats.map(s => `
+        <div class="data-brief-card">
+          <div class="data-brief-value">${s.value}</div>
+          <div class="data-brief-label">${s.label}</div>
+          ${s.note ? `<div class="data-brief-note">${s.note}</div>` : ''}
+        </div>
+      `).join('')}
     </div>
   `;
 }
@@ -398,7 +422,7 @@ function renderBlock1DamageReveal(block, blockId, isHost) {
 
   const inner = `
     <div class="block-hero-content block-hero--damage-reveal">
-      ${illustration ? `<div class="block-illustration">${illustration}</div>` : ''}
+      ${illustration ? `<div class="block-hero-illustration">${illustration}</div>` : ''}
       <div class="block-chapter-badge">Blok ${blockId}</div>
       <div class="block-time-badge">${block.time}</div>
 
@@ -422,6 +446,7 @@ function renderBlock1DamageReveal(block, blockId, isHost) {
       ` : ''}
     </div>
 
+    ${renderDataBrief(blockId)}
     ${isHost ? renderInsightPanel(blockId) : ''}
     ${renderActivityPicker(blockId, isHost)}
     ${isHost ? blockDoneToggle(blockId) : ''}
@@ -453,7 +478,7 @@ function renderBlock2CaseBoard(block, blockId, isHost) {
 
   const inner = `
     <div class="block-hero-content block-hero--case-board">
-      ${illustration ? `<div class="block-illustration">${illustration}</div>` : ''}
+      ${illustration ? `<div class="block-hero-illustration">${illustration}</div>` : ''}
       <div class="block-chapter-badge">Blok ${blockId}</div>
       <div class="block-time-badge">${block.time}</div>
       <h1 class="block-title">${block.name}</h1>
@@ -466,6 +491,7 @@ function renderBlock2CaseBoard(block, blockId, isHost) {
       </div>
     </div>
 
+    ${renderDataBrief(blockId)}
     ${isHost ? renderInsightPanel(blockId) : ''}
     ${renderActivityPicker(blockId, isHost)}
     ${isHost ? blockDoneToggle(blockId) : ''}
@@ -485,7 +511,7 @@ function renderBlock3DecisionArena(block, blockId, isHost) {
 
   const inner = `
     <div class="block-hero-content block-hero--decision-arena">
-      ${illustration ? `<div class="block-illustration">${illustration}</div>` : ''}
+      ${illustration ? `<div class="block-hero-illustration">${illustration}</div>` : ''}
       <div class="block-chapter-badge">Blok ${blockId}</div>
       <div class="block-time-badge">${block.time}</div>
       <h1 class="block-title">${block.name}</h1>
@@ -512,6 +538,7 @@ function renderBlock3DecisionArena(block, blockId, isHost) {
       </div>
     </div>
 
+    ${renderDataBrief(blockId)}
     ${isHost ? renderInsightPanel(blockId) : ''}
     ${renderActivityPicker(blockId, isHost)}
     ${isHost ? blockDoneToggle(blockId) : ''}
@@ -539,7 +566,7 @@ function renderBlock4ConversationSim(block, blockId, isHost) {
 
   const inner = `
     <div class="block-hero-content block-hero--conversation-sim">
-      ${illustration ? `<div class="block-illustration">${illustration}</div>` : ''}
+      ${illustration ? `<div class="block-hero-illustration">${illustration}</div>` : ''}
       <div class="block-chapter-badge">Blok ${blockId}</div>
       <div class="block-time-badge">${block.time}</div>
       <h1 class="block-title">${block.name}</h1>
@@ -552,6 +579,7 @@ function renderBlock4ConversationSim(block, blockId, isHost) {
       </div>
     </div>
 
+    ${renderDataBrief(blockId)}
     ${isHost ? renderInsightPanel(blockId) : ''}
     ${renderActivityPicker(blockId, isHost)}
     ${isHost ? blockDoneToggle(blockId) : ''}
@@ -583,7 +611,7 @@ function renderBlock5ModelingSim(block, blockId, isHost) {
 
   const inner = `
     <div class="block-hero-content block-hero--modeling-sim">
-      ${illustration ? `<div class="block-illustration">${illustration}</div>` : ''}
+      ${illustration ? `<div class="block-hero-illustration">${illustration}</div>` : ''}
       <div class="block-chapter-badge">Blok ${blockId}</div>
       <div class="block-time-badge">${block.time}</div>
       <h1 class="block-title">${block.name}</h1>
@@ -601,6 +629,7 @@ function renderBlock5ModelingSim(block, blockId, isHost) {
       </div>
     </div>
 
+    ${renderDataBrief(blockId)}
     ${isHost ? renderInsightPanel(blockId) : ''}
     ${renderActivityPicker(blockId, isHost)}
     ${isHost ? blockDoneToggle(blockId) : ''}
@@ -628,7 +657,7 @@ function renderBlock6TimelineBranch(block, blockId, isHost) {
 
   const inner = `
     <div class="block-hero-content block-hero--timeline-branch">
-      ${illustration ? `<div class="block-illustration">${illustration}</div>` : ''}
+      ${illustration ? `<div class="block-hero-illustration">${illustration}</div>` : ''}
       <div class="block-chapter-badge">Blok ${blockId}</div>
       <div class="block-time-badge">${block.time}</div>
       <h1 class="block-title">${block.name}</h1>
@@ -644,6 +673,7 @@ function renderBlock6TimelineBranch(block, blockId, isHost) {
       </div>
     </div>
 
+    ${renderDataBrief(blockId)}
     ${isHost ? renderInsightPanel(blockId) : ''}
     ${renderActivityPicker(blockId, isHost)}
     ${isHost ? blockDoneToggle(blockId) : ''}
@@ -671,7 +701,7 @@ function renderBlock7ObjectionBattle(block, blockId, isHost) {
 
   const inner = `
     <div class="block-hero-content block-hero--objection-battle">
-      ${illustration ? `<div class="block-illustration">${illustration}</div>` : ''}
+      ${illustration ? `<div class="block-hero-illustration">${illustration}</div>` : ''}
       <div class="block-chapter-badge">Blok ${blockId}</div>
       <div class="block-time-badge">${block.time}</div>
       <h1 class="block-title">${block.name}</h1>
@@ -692,6 +722,7 @@ function renderBlock7ObjectionBattle(block, blockId, isHost) {
       </div>
     </div>
 
+    ${renderDataBrief(blockId)}
     ${isHost ? renderInsightPanel(blockId) : ''}
     ${renderActivityPicker(blockId, isHost)}
     ${isHost ? blockDoneToggle(blockId) : ''}
@@ -718,7 +749,7 @@ function renderBlock8CommitmentArena(block, blockId, isHost) {
 
   const inner = `
     <div class="block-hero-content block-hero--commitment-arena">
-      ${illustration ? `<div class="block-illustration">${illustration}</div>` : ''}
+      ${illustration ? `<div class="block-hero-illustration">${illustration}</div>` : ''}
       <div class="block-chapter-badge">Blok ${blockId}</div>
       <div class="block-time-badge">${block.time}</div>
       <h1 class="block-title">${block.name}</h1>
@@ -734,6 +765,7 @@ function renderBlock8CommitmentArena(block, blockId, isHost) {
       </div>
     </div>
 
+    ${renderDataBrief(blockId)}
     ${isHost ? renderInsightPanel(blockId) : ''}
     ${renderActivityPicker(blockId, isHost)}
     ${isHost ? blockDoneToggle(blockId) : ''}
@@ -752,7 +784,7 @@ function renderBlockFallback(block, blockId, isHost) {
 
   const inner = `
     <div class="block-hero-content">
-      ${illustration ? `<div class="block-illustration">${illustration}</div>` : ''}
+      ${illustration ? `<div class="block-hero-illustration">${illustration}</div>` : ''}
       <div class="block-chapter-badge">Blok ${blockId}</div>
       <div class="block-time-badge">${block.time}</div>
       <h1 class="block-title">${block.name}</h1>
@@ -770,6 +802,7 @@ function renderBlockFallback(block, blockId, isHost) {
       ` : ''}
     </div>
 
+    ${renderDataBrief(blockId)}
     ${isHost ? renderInsightPanel(blockId) : ''}
     ${renderActivityPicker(blockId, isHost)}
     ${isHost ? blockDoneToggle(blockId) : ''}
@@ -824,9 +857,11 @@ export function renderMap() {
           const isDone = store.state.doneBlocks.has(b.id);
           const hero = heroVisuals[b.id] || {};
           const archetype = arenaArchetypes[b.id] || {};
+          const illustration = blockIllustrations[b.id] || '';
           return `
             <div class="map-tile ${isDone ? 'is-done' : ''}" data-arena="${archetype.type || ''}" onclick="window._goToBlock(${b.id})" style="${hero.cssGradient ? `--tile-bg: ${hero.cssGradient};` : ''}">
               <div class="map-tile-bg" style="${hero.cssGradient ? `background: ${hero.cssGradient};` : ''}"></div>
+              ${illustration ? `<div class="map-tile-illustration">${illustration}</div>` : ''}
               <div class="map-tile-content">
                 <div class="map-tile-num">${b.id}</div>
                 <div class="map-tile-time">${b.time}</div>

@@ -2129,3 +2129,612 @@ img { max-width: 100%; display: block; }
   opacity: 0.5;
   margin-top: 16px;
 }
+
+/* ==========================================================================
+   BLOCK HERO ILLUSTRATION — large, prominent SVG scene
+   ========================================================================== */
+.block-hero-illustration {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto 20px;
+  color: var(--arena-accent, var(--color-forest));
+  opacity: 0.55;
+  max-width: 360px;
+  transition: opacity 0.4s ease;
+}
+.block-hero-illustration:hover { opacity: 0.75; }
+.block-hero-illustration svg {
+  width: 100%;
+  max-width: 320px;
+  height: auto;
+  filter: drop-shadow(0 4px 24px rgba(0,0,0,0.06));
+}
+
+/* Per-block illustration tinting */
+.block-hero--damage-reveal .block-hero-illustration { color: #E57373; }
+.block-hero--case-board .block-hero-illustration { color: #66BB6A; }
+.block-hero--decision-arena .block-hero-illustration { color: #FFB74D; }
+.block-hero--conversation-sim .block-hero-illustration { color: #4DB6AC; }
+.block-hero--modeling-sim .block-hero-illustration { color: #7986CB; }
+.block-hero--timeline-branch .block-hero-illustration { color: #AB47BC; }
+.block-hero--objection-battle .block-hero-illustration { color: #EF5350; }
+.block-hero--commitment-arena .block-hero-illustration { color: #9CCC65; }
+
+/* ==========================================================================
+   ACTIVITY PICK THUMBNAIL — replaces icon with visual tile
+   ========================================================================== */
+.activity-pick-thumb {
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-md);
+  background: linear-gradient(135deg, var(--color-bg-warm) 0%, var(--color-border-light) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+  color: var(--arena-accent, var(--color-forest));
+  transition: all var(--transition);
+  border: 1px solid var(--color-border-light);
+}
+.activity-pick-card:hover .activity-pick-thumb {
+  background: linear-gradient(135deg, var(--color-accent-light) 0%, var(--color-bg-warm) 100%);
+  border-color: var(--arena-accent, var(--color-accent));
+  transform: scale(1.05);
+}
+.activity-pick-thumb svg {
+  width: 36px;
+  height: 36px;
+  opacity: 0.85;
+}
+
+@media (pointer: coarse) {
+  .activity-pick-thumb { width: 64px; height: 64px; }
+  .activity-pick-thumb svg { width: 42px; height: 42px; }
+}
+
+/* ==========================================================================
+   DATA BRIEF STRIP — always-visible key stats
+   ========================================================================== */
+.data-brief-strip {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+  margin: 20px 0;
+  text-align: left;
+}
+.data-brief-card {
+  background: var(--color-card);
+  border: 1.5px solid var(--color-border-light);
+  border-radius: var(--radius-lg);
+  padding: 16px;
+  position: relative;
+  overflow: hidden;
+  transition: all var(--transition);
+}
+.data-brief-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--arena-accent, var(--color-accent));
+  opacity: 0.6;
+}
+.data-brief-card:hover {
+  border-color: var(--arena-accent, var(--color-accent));
+  box-shadow: var(--shadow-sm);
+}
+.data-brief-value {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--arena-accent, var(--color-forest));
+  line-height: 1.1;
+  margin-bottom: 4px;
+}
+.data-brief-label {
+  font-size: 12px;
+  color: var(--color-text-muted);
+  line-height: 1.4;
+}
+.data-brief-note {
+  font-size: 10px;
+  color: var(--color-text-light);
+  margin-top: 4px;
+  font-style: italic;
+}
+
+/* ==========================================================================
+   MAP TILE ILLUSTRATION — decorative overlay
+   ========================================================================== */
+.map-tile-illustration {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.12;
+  color: rgba(255,255,255,0.9);
+  pointer-events: none;
+  overflow: hidden;
+}
+.map-tile-illustration svg {
+  width: 200px;
+  height: auto;
+  transform: scale(1.2);
+}
+
+/* ==========================================================================
+   BLOCK 1: damage-reveal — hero stat (views.js class names)
+   ========================================================================== */
+.damage-reveal-hero-stat {
+  margin: 24px 0;
+  padding: 32px 24px;
+  background: linear-gradient(135deg, rgba(198,40,40,0.08) 0%, rgba(198,40,40,0.02) 100%);
+  border-radius: var(--radius-xl);
+  border: 1px solid rgba(198,40,40,0.15);
+  text-align: center;
+}
+.damage-reveal-stat-number {
+  font-size: clamp(36px, 7vw, 60px);
+  font-weight: 800;
+  color: #C62828;
+  line-height: 1;
+  margin-bottom: 6px;
+}
+.damage-reveal-stat-label {
+  font-size: 14px;
+  color: var(--color-text-muted);
+  font-weight: 500;
+}
+
+/* ==========================================================================
+   BLOCK 2: case-board — family card grid (views.js class names)
+   ========================================================================== */
+.case-board-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin: 24px 0;
+}
+.case-board-card {
+  background: var(--color-card);
+  border: 1.5px solid var(--color-border-light);
+  border-radius: var(--radius-lg);
+  padding: 20px 16px;
+  text-align: left;
+  transition: all var(--transition);
+}
+.case-board-card:hover {
+  border-color: var(--color-forest);
+  box-shadow: var(--shadow-sm);
+  transform: translateY(-2px);
+}
+.case-board-card-name {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--color-forest);
+  margin-bottom: 4px;
+}
+.case-board-card-type {
+  font-size: 12px;
+  color: var(--color-text-muted);
+  margin-bottom: 8px;
+}
+.case-board-card-members {
+  font-size: 12px;
+  color: var(--color-text-light);
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.case-board-card-members svg { width: 14px; height: 14px; }
+.case-board-card-risks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.case-board-risk-tag {
+  font-size: 10px;
+  padding: 2px 8px;
+  background: var(--color-forest-light);
+  color: var(--color-forest);
+  border-radius: var(--radius-full);
+  font-weight: 500;
+}
+@media (max-width: 600px) {
+  .case-board-grid { grid-template-columns: 1fr; }
+}
+
+/* ==========================================================================
+   BLOCK 3: decision-arena — split screen (views.js class names)
+   ========================================================================== */
+.decision-split-screen {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 0;
+  margin: 24px 0;
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+}
+.decision-split-side {
+  padding: 32px 20px;
+  text-align: center;
+  min-height: 120px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.decision-split--covered {
+  background: linear-gradient(135deg, #E8F5E9, #C8E6C9);
+}
+.decision-split--excluded {
+  background: linear-gradient(135deg, #FFF3E0, #FFE0B2);
+}
+.decision-split-label {
+  font-size: 22px;
+  font-weight: 800;
+}
+.decision-split-desc {
+  font-size: 13px;
+  color: var(--color-text-muted);
+  margin-top: 4px;
+}
+.decision-split-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-card);
+  padding: 0 12px;
+  border-left: 1px solid var(--color-border-light);
+  border-right: 1px solid var(--color-border-light);
+}
+.decision-split-vs {
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--color-warning);
+}
+.decision-question-prompt {
+  text-align: center;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  margin: 16px 0 0;
+  padding: 16px;
+  background: var(--color-card);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border-light);
+}
+
+/* ==========================================================================
+   BLOCK 4: conversation-sim — chat bubbles (views.js class names)
+   ========================================================================== */
+.conversation-preview {
+  margin: 24px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.chat-bubble {
+  max-width: 80%;
+  padding: 12px 16px;
+  border-radius: var(--radius-lg);
+  font-size: 14px;
+  line-height: 1.5;
+  animation: chatSlideIn 0.4s ease both;
+}
+.chat-bubble:nth-child(2) { animation-delay: 0.2s; }
+.chat-bubble:nth-child(3) { animation-delay: 0.4s; }
+.chat-bubble--client {
+  background: var(--color-border-light);
+  color: var(--color-text);
+  align-self: flex-start;
+  border-bottom-left-radius: 4px;
+}
+.chat-bubble--banker {
+  background: var(--color-teal);
+  color: white;
+  align-self: flex-end;
+  border-bottom-right-radius: 4px;
+}
+.chat-bubble-role {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  opacity: 0.7;
+  margin-bottom: 4px;
+}
+.chat-bubble-text {
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* ==========================================================================
+   BLOCK 5: modeling-sim — dashboard (views.js class names)
+   ========================================================================== */
+.modeling-dashboard {
+  margin: 24px 0;
+  border: 1.5px solid var(--color-border-light);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  background: var(--color-card);
+}
+.modeling-dashboard-header {
+  padding: 12px 16px;
+  background: var(--color-bg-warm);
+  border-bottom: 1px solid var(--color-border-light);
+}
+.modeling-dashboard-label {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--color-text-muted);
+}
+.modeling-dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--color-border-light);
+}
+.modeling-stat-box {
+  background: var(--color-card);
+  padding: 16px 14px;
+  text-align: center;
+}
+.modeling-stat-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--color-forest);
+  margin-bottom: 2px;
+}
+.modeling-stat-type {
+  font-size: 11px;
+  color: var(--color-text-muted);
+  margin-bottom: 6px;
+}
+.modeling-stat-budget {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--color-text);
+  margin-bottom: 6px;
+}
+.modeling-stat-needs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  justify-content: center;
+}
+.modeling-need-tag {
+  font-size: 10px;
+  padding: 2px 8px;
+  background: var(--color-accent-light);
+  color: var(--color-accent-dark);
+  border-radius: var(--radius-full);
+  font-weight: 500;
+}
+@media (max-width: 600px) {
+  .modeling-dashboard-grid { grid-template-columns: 1fr; }
+}
+
+/* ==========================================================================
+   BLOCK 6: timeline-branch — horizontal timeline (views.js class names)
+   ========================================================================== */
+.timeline-visual {
+  margin: 24px 0;
+  position: relative;
+  padding: 0 12px;
+}
+.timeline-line {
+  position: absolute;
+  top: 20px;
+  left: 12px;
+  right: 12px;
+  height: 3px;
+  background: var(--color-border);
+  border-radius: 2px;
+}
+.timeline-dots {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+}
+.timeline-dot-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 0 0 auto;
+}
+.timeline-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 3px solid #6B4BA6;
+  background: var(--color-card);
+  margin-bottom: 8px;
+  position: relative;
+  z-index: 1;
+  transition: all var(--transition);
+}
+.timeline-dot-item:hover .timeline-dot {
+  background: #6B4BA6;
+  transform: scale(1.3);
+}
+.timeline-dot-label {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  text-align: center;
+  max-width: 80px;
+  line-height: 1.3;
+}
+
+/* ==========================================================================
+   BLOCK 7: objection-battle — fan card layout (views.js class names)
+   ========================================================================== */
+.objection-battle-arena {
+  margin: 24px 0;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.objection-fan-stack {
+  display: flex;
+  justify-content: center;
+  position: relative;
+  height: 180px;
+  flex: 1;
+  min-width: 240px;
+}
+.objection-fan-card {
+  position: absolute;
+  width: 200px;
+  background: var(--color-card);
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 16px;
+  box-shadow: var(--shadow-md);
+  text-align: left;
+  transition: all 0.35s ease;
+  transform-origin: bottom center;
+  transform: rotate(calc((var(--fan-index) - (var(--fan-total) - 1) / 2) * 8deg))
+             translateY(calc(var(--fan-index) * -3px));
+  z-index: calc(var(--fan-total) - var(--fan-index));
+  top: 20px;
+  left: 50%;
+  margin-left: -100px;
+}
+.objection-fan-card:hover {
+  transform: rotate(0deg) translateY(-20px) scale(1.05);
+  z-index: 10;
+  box-shadow: var(--shadow-lg);
+}
+.objection-fan-text {
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.4;
+  margin-bottom: 8px;
+}
+.objection-fan-type {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  background: rgba(211,47,47,0.1);
+  color: #D32F2F;
+  border-radius: var(--radius-full);
+  display: inline-block;
+}
+.objection-vs-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+.objection-vs-text {
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--color-danger);
+  text-shadow: 0 2px 8px rgba(211,47,47,0.15);
+}
+.objection-response-side {
+  flex: 1;
+  min-width: 160px;
+  min-height: 120px;
+  background: var(--color-card);
+  border: 2px dashed var(--color-border);
+  border-radius: var(--radius-xl);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition);
+}
+.objection-response-side:hover {
+  border-color: var(--color-accent);
+  border-style: solid;
+}
+.objection-response-placeholder {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text-light);
+}
+
+/* ==========================================================================
+   BLOCK 8: commitment-arena — wall grid (views.js class names)
+   ========================================================================== */
+.commitment-wall {
+  margin: 24px 0;
+}
+.commitment-wall-header {
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--color-text-light);
+  margin-bottom: 12px;
+}
+.commitment-wall-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+.commitment-wall-card {
+  background: var(--color-forest-light);
+  border-radius: var(--radius-md);
+  padding: 16px 12px;
+  border-left: 3px solid var(--color-forest);
+  min-height: 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: all var(--transition);
+}
+.commitment-wall-card--placeholder {
+  opacity: 0.7;
+  border-style: dashed;
+}
+.commitment-wall-card:hover {
+  opacity: 1;
+  box-shadow: var(--shadow-sm);
+  transform: translateY(-2px);
+}
+.commitment-wall-card-icon {
+  color: var(--color-forest);
+  opacity: 0.5;
+}
+.commitment-wall-card-icon svg { width: 20px; height: 20px; }
+.commitment-wall-card-text {
+  font-size: 13px;
+  color: var(--color-forest);
+  font-weight: 500;
+  text-align: center;
+}
+@media (max-width: 480px) {
+  .commitment-wall-grid { grid-template-columns: 1fr 1fr; }
+}
+
+/* ==========================================================================
+   DISPLAY VIEW — block illustration overlay
+   ========================================================================== */
+.display-block-illustration {
+  margin: 24px auto;
+  opacity: 0.25;
+  color: rgba(255,255,255,0.8);
+  max-width: 280px;
+}
+.display-block-illustration svg {
+  width: 100%;
+  height: auto;
+}
