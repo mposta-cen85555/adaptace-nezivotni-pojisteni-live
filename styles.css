@@ -430,7 +430,7 @@ img { max-width: 100%; display: block; }
 .session-nav-label { font-size: 14px; font-weight: 600; color: var(--color-text-muted); min-width: 80px; text-align: center; }
 
 /* ==========================================================================
-   BLOCK SCREEN — main content area
+   BLOCK SCREEN — with hero visual background
    ========================================================================== */
 .block-screen-main {
   min-height: 100vh;
@@ -443,6 +443,41 @@ img { max-width: 100%; display: block; }
   max-width: 560px;
   width: 100%;
   text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+/* Hero visual background */
+.block-hero-bg {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  z-index: -2;
+  transition: background 0.8s ease;
+}
+.block-hero-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  z-index: -1;
+  background: rgba(250, 251, 252, 0.88);
+  backdrop-filter: blur(2px);
+}
+
+/* Hero content area */
+.block-hero-content {
+  position: relative;
+  z-index: 1;
+}
+.block-chapter-badge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--color-forest);
+  padding: 6px 16px;
+  border: 1.5px solid var(--color-forest);
+  border-radius: var(--radius-full);
+  margin-bottom: 16px;
 }
 .block-chapter-num {
   color: var(--color-forest);
@@ -463,7 +498,13 @@ img { max-width: 100%; display: block; }
   font-size: clamp(28px, 5vw, 40px);
   font-weight: 800;
   line-height: 1.15;
-  margin-bottom: 12px;
+  margin-bottom: 8px;
+}
+.block-tagline {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--color-forest);
+  margin-bottom: 8px;
 }
 .block-goal {
   font-size: 16px;
@@ -576,14 +617,53 @@ img { max-width: 100%; display: block; }
 }
 
 /* ==========================================================================
-   ARENA VIEW — fullscreen activity execution
+   ARENA VIEW — fullscreen activity with per-block archetype theming
    ========================================================================== */
 .view-arena {
   min-height: 100vh;
-  background: var(--color-bg);
   display: flex;
   flex-direction: column;
+  position: relative;
+  overflow: hidden;
 }
+/* Arena background layer — per-block gradient */
+.arena-bg {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  z-index: 0;
+  background: var(--color-bg);
+  transition: background 0.6s ease;
+}
+.arena-bg-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(250, 251, 252, 0.92);
+  backdrop-filter: blur(4px);
+}
+.arena-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Per-block arena archetype visual differentiation */
+.view-arena[data-arena="damage-reveal"] .arena-bg-overlay { background: rgba(250, 240, 240, 0.88); }
+.view-arena[data-arena="case-board"] .arena-bg-overlay { background: rgba(240, 250, 245, 0.88); }
+.view-arena[data-arena="decision-arena"] .arena-bg-overlay { background: rgba(255, 248, 240, 0.88); }
+.view-arena[data-arena="conversation-sim"] .arena-bg-overlay { background: rgba(240, 250, 250, 0.88); }
+.view-arena[data-arena="modeling-sim"] .arena-bg-overlay { background: rgba(240, 240, 255, 0.88); }
+.view-arena[data-arena="timeline-branch"] .arena-bg-overlay { background: rgba(248, 240, 255, 0.88); }
+.view-arena[data-arena="objection-battle"] .arena-bg-overlay { background: rgba(255, 240, 240, 0.88); }
+.view-arena[data-arena="commitment-arena"] .arena-bg-overlay { background: rgba(240, 250, 240, 0.88); }
+
+/* Arena accent color flows through from --arena-accent custom property */
+.view-arena .phase-dot.is-active { background: var(--arena-accent, var(--color-accent)); }
+.view-arena .btn-accent { background: var(--arena-accent, var(--color-accent)); }
+.view-arena .arena-intro-label { color: var(--arena-accent, var(--color-accent-dark)); }
+.view-arena .quiz-option.is-correct { border-color: var(--color-success); }
+.view-arena .estimate-slider::-webkit-slider-thumb { background: var(--arena-accent, var(--color-accent)); }
 
 /* Arena header */
 .arena-header {
@@ -1175,7 +1255,7 @@ img { max-width: 100%; display: block; }
 }
 
 /* ==========================================================================
-   DISPLAY VIEW — projector mode
+   DISPLAY VIEW — projector mode with per-block hero backgrounds
    ========================================================================== */
 .view-display {
   min-height: 100vh;
@@ -1186,26 +1266,90 @@ img { max-width: 100%; display: block; }
   color: white;
   padding: 40px;
 }
-.display-idle { text-align: center; }
+.display-idle { text-align: center; max-width: 900px; }
 .display-brand { font-size: 14px; font-weight: 600; opacity: 0.7; margin-bottom: 16px; letter-spacing: 1px; text-transform: uppercase; }
-.display-title { font-size: 64px; font-weight: 800; line-height: 1.05; margin-bottom: 8px; }
-.display-subtitle { font-size: 24px; font-weight: 500; opacity: 0.8; margin-bottom: 40px; }
+.display-title { font-size: clamp(48px, 8vw, 80px); font-weight: 800; line-height: 1.05; margin-bottom: 8px; }
+.display-subtitle { font-size: clamp(20px, 3vw, 28px); font-weight: 500; opacity: 0.8; margin-bottom: 40px; }
 .display-room-code { margin-top: 32px; }
-.display-code-label { font-size: 14px; opacity: 0.6; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
-.display-code-value { font-size: 72px; font-weight: 800; letter-spacing: 12px; color: var(--color-accent); }
+.display-code-label { font-size: 16px; opacity: 0.6; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+.display-code-value { font-size: clamp(56px, 10vw, 96px); font-weight: 800; letter-spacing: 12px; color: var(--color-accent); }
 .display-participant-count {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  font-size: 16px;
+  font-size: 18px;
   opacity: 0.7;
   margin-top: 24px;
 }
-.display-block-screen { text-align: center; }
-.display-block-num { font-size: 16px; opacity: 0.6; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
-.display-block-title { font-size: 48px; font-weight: 800; line-height: 1.1; margin-bottom: 12px; }
-.display-block-goal { font-size: 20px; opacity: 0.8; max-width: 600px; margin: 0 auto 20px; line-height: 1.6; }
+/* Market stats for idle display */
+.display-market-stats {
+  display: flex;
+  gap: 48px;
+  justify-content: center;
+  margin-top: 48px;
+}
+.display-stat { text-align: center; }
+.display-stat-number {
+  font-size: clamp(36px, 6vw, 56px);
+  font-weight: 800;
+  color: var(--color-accent);
+  margin-bottom: 4px;
+}
+.display-stat-label {
+  font-size: 15px;
+  opacity: 0.7;
+  max-width: 300px;
+  line-height: 1.5;
+}
+/* Block display screen with hero bg */
+.display-block-screen {
+  text-align: center;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  margin: -40px;
+  padding: 60px;
+  position: relative;
+  overflow: hidden;
+}
+.display-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  z-index: 0;
+}
+.display-block-content {
+  position: relative;
+  z-index: 1;
+  max-width: 800px;
+}
+.display-block-badge {
+  display: inline-block;
+  font-size: 14px;
+  font-weight: 700;
+  opacity: 0.7;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 16px;
+  padding: 8px 20px;
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: var(--radius-full);
+}
+.display-block-title { font-size: clamp(40px, 7vw, 72px); font-weight: 800; line-height: 1.08; margin-bottom: 12px; }
+.display-block-tagline { font-size: clamp(20px, 3vw, 28px); font-weight: 600; color: var(--color-accent); margin-bottom: 12px; }
+.display-block-goal { font-size: clamp(16px, 2vw, 22px); opacity: 0.8; max-width: 600px; margin: 0 auto 24px; line-height: 1.6; }
 .display-block-time { font-size: 18px; opacity: 0.6; }
+/* Per-arena archetype display styling */
+.view-display[data-arena="damage-reveal"] { background: linear-gradient(160deg, #1A1A2E 0%, #3A1A1A 100%); }
+.view-display[data-arena="case-board"] { background: linear-gradient(160deg, #0D2818 0%, #1A6B4B 100%); }
+.view-display[data-arena="decision-arena"] { background: linear-gradient(160deg, #1A1A2E 0%, #4A3010 100%); }
+.view-display[data-arena="conversation-sim"] { background: linear-gradient(160deg, #001A1A 0%, #008080 100%); }
+.view-display[data-arena="modeling-sim"] { background: linear-gradient(160deg, #1A1A2E 0%, #3A3A6E 100%); }
+.view-display[data-arena="timeline-branch"] { background: linear-gradient(160deg, #1A1020 0%, #6B4BA6 100%); }
+.view-display[data-arena="objection-battle"] { background: linear-gradient(160deg, #1A1A2E 0%, #8A2020 100%); }
+.view-display[data-arena="commitment-arena"] { background: linear-gradient(160deg, #0D2818 0%, #2D6A1E 100%); }
 .arena-display-center {
   flex: 1;
   display: flex;
@@ -1227,12 +1371,12 @@ img { max-width: 100%; display: block; }
 .progress-ring-label { font-size: 14px; color: var(--color-text-light); margin-top: 4px; }
 
 /* ==========================================================================
-   MAP VIEW
+   MAP VIEW — with per-block hero visual tiles
    ========================================================================== */
 .view-map {
   min-height: 100vh;
   padding: 24px;
-  max-width: 900px;
+  max-width: 1000px;
   margin: 0 auto;
 }
 .map-header {
@@ -1245,21 +1389,38 @@ img { max-width: 100%; display: block; }
 .map-header h2 { font-size: 24px; }
 .map-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; }
 .map-tile {
-  background: var(--color-card);
-  border: 1px solid var(--color-border-light);
   border-radius: var(--radius-lg);
-  padding: 20px;
   cursor: pointer;
   transition: all var(--transition);
+  position: relative;
+  overflow: hidden;
+  min-height: 160px;
 }
-.map-tile:hover { box-shadow: var(--shadow-md); border-color: var(--color-accent); transform: translateY(-2px); }
-.map-tile.is-done { border-color: var(--color-forest); background: var(--color-forest-light); }
-.map-tile-icon { color: var(--color-forest); margin-bottom: 8px; }
-.map-tile-num { font-size: 13px; font-weight: 700; color: var(--color-text-light); }
-.map-tile-time { font-size: 12px; color: var(--color-text-muted); margin-bottom: 4px; }
-.map-tile-name { font-size: 16px; font-weight: 600; margin-bottom: 4px; }
-.map-tile-goal { font-size: 13px; color: var(--color-text-muted); line-height: 1.5; margin-bottom: 8px; }
-.map-tile-meta { font-size: 12px; color: var(--color-text-light); }
+.map-tile:hover { box-shadow: var(--shadow-lg); transform: translateY(-3px); }
+.map-tile.is-done { outline: 3px solid var(--color-forest); }
+.map-tile-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+}
+.map-tile-content {
+  position: relative;
+  z-index: 1;
+  padding: 20px;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  min-height: 160px;
+  background: linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.6) 100%);
+  border-radius: inherit;
+}
+.map-tile-num { font-size: 12px; font-weight: 700; opacity: 0.8; letter-spacing: 1px; margin-bottom: 4px; }
+.map-tile-time { font-size: 12px; opacity: 0.6; margin-bottom: 4px; }
+.map-tile-name { font-size: 17px; font-weight: 700; margin-bottom: 2px; }
+.map-tile-tagline { font-size: 13px; font-weight: 500; color: var(--color-accent); margin-bottom: 4px; }
+.map-tile-meta { font-size: 12px; opacity: 0.6; }
 
 /* ==========================================================================
    Responsive
@@ -1287,4 +1448,83 @@ img { max-width: 100%; display: block; }
   .block-title { font-size: 24px; }
   .session-block-nav { padding: 6px 14px; gap: 10px; }
   .matching-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* ==========================================================================
+   TABLET-FIRST TOUCH TARGETS — min 44px, large drop zones
+   ========================================================================== */
+@media (pointer: coarse) {
+  .btn { min-height: 48px; padding: 14px 24px; }
+  .btn-lg { min-height: 56px; padding: 16px 32px; font-size: 17px; }
+  .quiz-option { min-height: 56px; padding: 16px 24px; font-size: 16px; }
+  .vote-option-btn { min-height: 60px; padding: 18px 24px; font-size: 17px; }
+  .sort-item { min-height: 48px; padding: 12px 18px; font-size: 15px; }
+  .sort-bucket { min-height: 160px; padding: 16px; }
+  .matching-card { min-height: 64px; font-size: 14px; }
+  .feedback-star, .review-score-btn { width: 56px; height: 56px; font-size: 20px; }
+  .estimate-slider::-webkit-slider-thumb { width: 36px; height: 36px; }
+  .auction-bid-input { min-height: 48px; font-size: 16px; width: 120px; }
+  .activity-list-item { min-height: 56px; padding: 14px 18px; }
+  .activity-card { padding: 32px; }
+  .activity-start-btn { min-height: 56px; }
+  .join-input { min-height: 52px; font-size: 18px; }
+  .join-team-btn { min-height: 48px; font-size: 15px; }
+  .session-dot { width: 36px; height: 36px; font-size: 14px; }
+  .session-nav-btn { width: 48px; height: 48px; }
+}
+
+/* ==========================================================================
+   ACTIVITY CARD — per-arena accent on left border
+   ========================================================================== */
+.activity-card--recommended {
+  border-left: 4px solid var(--arena-accent, var(--color-accent));
+}
+
+/* ==========================================================================
+   ARENA ARCHETYPE REVEAL ANIMATIONS
+   ========================================================================== */
+@keyframes revealDramatic {
+  0% { transform: scale(0.5); opacity: 0; }
+  60% { transform: scale(1.05); }
+  100% { transform: scale(1); opacity: 1; }
+}
+@keyframes revealSlide {
+  0% { transform: translateY(40px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+@keyframes revealColorBurst {
+  0% { opacity: 0; filter: saturate(0); }
+  50% { filter: saturate(2); }
+  100% { opacity: 1; filter: saturate(1); }
+}
+@keyframes revealFadeCascade {
+  0% { opacity: 0; transform: translateY(12px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+.view-arena[data-arena="damage-reveal"] .arena-reveal-card { animation: revealDramatic 0.6s ease-out; }
+.view-arena[data-arena="damage-reveal"] .reveal-number { color: #C62828; }
+.view-arena[data-arena="case-board"] .arena-card { animation: revealSlide 0.4s ease-out; }
+.view-arena[data-arena="decision-arena"] .vote-results-bars { animation: revealColorBurst 0.5s ease-out; }
+.view-arena[data-arena="objection-battle"] .arena-card { animation: revealSlide 0.3s ease-out; }
+.view-arena[data-arena="commitment-arena"] .wall-card { animation: revealFadeCascade 0.4s ease-out both; }
+.view-arena[data-arena="commitment-arena"] .wall-card:nth-child(2) { animation-delay: 0.1s; }
+.view-arena[data-arena="commitment-arena"] .wall-card:nth-child(3) { animation-delay: 0.2s; }
+.view-arena[data-arena="commitment-arena"] .wall-card:nth-child(4) { animation-delay: 0.3s; }
+
+/* ==========================================================================
+   DISPLAY MODE — projector-optimized typography
+   ========================================================================== */
+@media (min-width: 1200px) {
+  .display-title { font-size: 80px; }
+  .display-code-value { font-size: 96px; letter-spacing: 16px; }
+  .display-block-title { font-size: 72px; }
+  .display-question-text { font-size: 40px; }
+  .display-options { gap: 16px; }
+  .display-option { padding: 24px 28px; font-size: 22px; }
+  .display-option-letter { width: 40px; height: 40px; font-size: 18px; }
+  .arena-display-center { padding: 60px; }
+  .display-scenario-title { font-size: 44px; }
+  .display-scenario-desc { font-size: 22px; }
+  .progress-ring-count { font-size: 80px; }
+  .display-stat-number { font-size: 56px; }
 }

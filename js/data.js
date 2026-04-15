@@ -1,20 +1,68 @@
 /**
- * data.js — Agenda blocks, activity definitions, and content data layer
- * All business content that needs validation is flagged with _validated: false
+ * data.js — Agenda blocks, activity definitions, versioned content data layer
+ * All business content with metadata: source, validation status, confidence
+ * Architecture: UI reads from contentData[key], business team edits data only
  */
 
 /* ==========================================================================
-   AGENDA — 8 training blocks
+   CONTENT METADATA SCHEMA — every content item should carry:
+   {
+     _source_url:    string | null     // public URL of the source
+     _source_name:   string            // e.g. "ČAP Výroční zpráva 2024"
+     _retrieved_at:  string            // ISO date
+     _validated:     boolean           // business team confirmed
+     _confidence:    'high'|'medium'|'low'|'draft'
+     _product_area:  string            // e.g. "majetek", "odpovědnost"
+     _competitor:    string | null      // e.g. "Kooperativa"
+     _tags:          string[]
+     _valid_from:    string | null      // date from which data is valid
+     _needs_legal:   boolean
+     _needs_business: boolean
+     _notes:         string | null
+   }
+   ========================================================================== */
+
+/* ==========================================================================
+   ARENA ARCHETYPES — each block is a distinct experience genre
+   ========================================================================== */
+export const arenaArchetypes = {
+  1: { type: 'damage-reveal',     accent: '#C62828', gradientFrom: '#1A1A2E', gradientTo: '#3A1A1A', motif: 'flood',       displayLayout: 'big-number',   revealStyle: 'dramatic-counter' },
+  2: { type: 'case-board',        accent: '#1A6B4B', gradientFrom: '#0D2818', gradientTo: '#1A3A2A', motif: 'family',      displayLayout: 'grid-cards',   revealStyle: 'expand-card' },
+  3: { type: 'decision-arena',    accent: '#E65100', gradientFrom: '#1A1A2E', gradientTo: '#2E1A00', motif: 'courtroom',   displayLayout: 'split-vote',   revealStyle: 'color-burst' },
+  4: { type: 'conversation-sim',  accent: '#008080', gradientFrom: '#001A1A', gradientTo: '#0D2D2D', motif: 'meeting',     displayLayout: 'dialogue',     revealStyle: 'slide-in' },
+  5: { type: 'modeling-sim',      accent: '#5C6BC0', gradientFrom: '#1A1A2E', gradientTo: '#1A1A3E', motif: 'laptop',      displayLayout: 'builder',      revealStyle: 'build-up' },
+  6: { type: 'timeline-branch',   accent: '#6B4BA6', gradientFrom: '#1A1020', gradientTo: '#2A1A3A', motif: 'documents',   displayLayout: 'timeline',     revealStyle: 'step-reveal' },
+  7: { type: 'objection-battle',  accent: '#D32F2F', gradientFrom: '#1A1A2E', gradientTo: '#2E1A1A', motif: 'negotiation', displayLayout: 'battle-cards', revealStyle: 'clash' },
+  8: { type: 'commitment-arena',  accent: '#A4D233', gradientFrom: '#0D2818', gradientTo: '#1A3520', motif: 'horizon',     displayLayout: 'wall',         revealStyle: 'fade-cascade' },
+};
+
+/* ==========================================================================
+   HERO VISUALS — per-block thematic image descriptors
+   Actual image URLs should be added by the team; architecture is ready
+   ========================================================================== */
+export const heroVisuals = {
+  1: { label: 'Vytopený byt po havárii',         placeholder: 'gradient', cssGradient: 'linear-gradient(135deg, #1a1a2e 0%, #3a1a1a 50%, #5a2020 100%)', overlay: 0.7 },
+  2: { label: 'Rodina v obývacím pokoji',         placeholder: 'gradient', cssGradient: 'linear-gradient(135deg, #0d2818 0%, #1a6b4b 50%, #2d8a6a 100%)', overlay: 0.65 },
+  3: { label: 'Poškozená nemovitost – vloupání',  placeholder: 'gradient', cssGradient: 'linear-gradient(135deg, #1a1a2e 0%, #2e1a00 50%, #4a3010 100%)', overlay: 0.7 },
+  4: { label: 'Obchodní schůzka v pobočce',       placeholder: 'gradient', cssGradient: 'linear-gradient(135deg, #001a1a 0%, #008080 50%, #00a0a0 100%)', overlay: 0.65 },
+  5: { label: 'Práce se systémem Hades',          placeholder: 'gradient', cssGradient: 'linear-gradient(135deg, #1a1a2e 0%, #3a3a6e 50%, #5c6bc0 100%)', overlay: 0.65 },
+  6: { label: 'Dokumenty a termíny smluv',        placeholder: 'gradient', cssGradient: 'linear-gradient(135deg, #1a1020 0%, #3a2050 50%, #6b4ba6 100%)', overlay: 0.65 },
+  7: { label: 'Rozhodovací moment při námitce',   placeholder: 'gradient', cssGradient: 'linear-gradient(135deg, #1a1a2e 0%, #4a1a1a 50%, #d32f2f 100%)', overlay: 0.7 },
+  8: { label: 'Výhled – nový začátek',            placeholder: 'gradient', cssGradient: 'linear-gradient(135deg, #0d2818 0%, #2d6a1e 50%, #a4d233 100%)', overlay: 0.6 },
+};
+
+/* ==========================================================================
+   AGENDA — 8 training blocks with arena archetype metadata
    ========================================================================== */
 export const agendaData = [
-  { id: 1, time: '09:00–09:45', name: 'Úvod do reality škod a mindset', durationMin: 45, activeRatio: '80 %', goal: 'Ukázat finanční dopad pojistných událostí a navázat na principy POSTOJ.', icon: 'shield-alert' },
-  { id: 2, time: '09:45–10:30', name: 'Mapa rizik a parametrů v praxi', durationMin: 45, activeRatio: '70 %', goal: 'Orientace v parametrech pojištění a práce s modelovými rodinami.', icon: 'map' },
-  { id: 3, time: '10:45–11:30', name: 'Kdo nese odpovědnost?', durationMin: 45, activeRatio: '85 %', goal: 'Rozlišit občanskou odpovědnost, odpovědnost z nemovitosti a výluky.', icon: 'scale' },
-  { id: 4, time: '11:30–12:00', name: 'Přechod k nabídce (FIT → Hades)', durationMin: 30, activeRatio: '90 %', goal: 'Natrénovat přechodovou frázi a přirozený vstup do nabídky.', icon: 'arrow-right-circle' },
-  { id: 5, time: '12:45–13:45', name: 'Modelování nabídek v systému', durationMin: 60, activeRatio: '95 %', goal: 'Tvořit reálné nabídky pro klientské rodiny a odbourat strach ze systému.', icon: 'laptop' },
-  { id: 6, time: '13:45–14:30', name: 'Práce se stávajícími smlouvami', durationMin: 45, activeRatio: '75 %', goal: 'Pochopit lhůty, výročí, výpovědi a bezpečný přechod klienta.', icon: 'file-text' },
-  { id: 7, time: '14:45–15:45', name: 'Obchodní rozhovor a námitky', durationMin: 60, activeRatio: '90 %', goal: 'Trénovat argumentaci a reagovat na námitky cena/konkurence.', icon: 'message-circle' },
-  { id: 8, time: '15:45–16:00', name: 'Závěrečná reflexe a akční plán', durationMin: 15, activeRatio: '100 %', goal: 'Uzavřít den konkrétním cílem pro praxi.', icon: 'target' },
+  { id: 1, time: '09:00–09:45', name: 'Úvod do reality škod a mindset', durationMin: 45, activeRatio: '80 %', goal: 'Ukázat finanční dopad pojistných událostí a navázat na principy POSTOJ.', icon: 'shield-alert', arenaType: 'damage-reveal',    tagline: 'Kolik stojí realita?' },
+  { id: 2, time: '09:45–10:30', name: 'Mapa rizik a parametrů v praxi', durationMin: 45, activeRatio: '70 %', goal: 'Orientace v parametrech pojištění a práce s modelovými rodinami.', icon: 'map',          arenaType: 'case-board',       tagline: 'Tři rodiny, tři světy' },
+  { id: 3, time: '10:45–11:30', name: 'Kdo nese odpovědnost?',          durationMin: 45, activeRatio: '85 %', goal: 'Rozlišit občanskou odpovědnost, odpovědnost z nemovitosti a výluky.', icon: 'scale',   arenaType: 'decision-arena',   tagline: 'Rozhodněte správně' },
+  { id: 4, time: '11:30–12:00', name: 'Přechod k nabídce (FIT → Hades)', durationMin: 30, activeRatio: '90 %', goal: 'Natrénovat přechodovou frázi a přirozený vstup do nabídky.', icon: 'arrow-right-circle', arenaType: 'conversation-sim', tagline: 'Najděte přirozený moment' },
+  { id: 5, time: '12:45–13:45', name: 'Modelování nabídek v systému',   durationMin: 60, activeRatio: '95 %', goal: 'Tvořit reálné nabídky pro klientské rodiny a odbourat strach ze systému.', icon: 'laptop', arenaType: 'modeling-sim',     tagline: 'Stavíte reálnou nabídku' },
+  { id: 6, time: '13:45–14:30', name: 'Práce se stávajícími smlouvami', durationMin: 45, activeRatio: '75 %', goal: 'Pochopit lhůty, výročí, výpovědi a bezpečný přechod klienta.', icon: 'file-text',        arenaType: 'timeline-branch',  tagline: 'Lhůty rozhodují' },
+  { id: 7, time: '14:45–15:45', name: 'Obchodní rozhovor a námitky',    durationMin: 60, activeRatio: '90 %', goal: 'Trénovat argumentaci a reagovat na námitky cena/konkurence.', icon: 'message-circle',     arenaType: 'objection-battle', tagline: 'Obstojíte?' },
+  { id: 8, time: '15:45–16:00', name: 'Závěrečná reflexe a akční plán', durationMin: 15, activeRatio: '100 %', goal: 'Uzavřít den konkrétním cílem pro praxi.', icon: 'target',                              arenaType: 'commitment-arena', tagline: 'Váš závazek pro praxi' },
 ];
 
 /* ==========================================================================
@@ -314,4 +362,76 @@ export const contentData = {
   argumentStrength: [],         // TODO: needs validation
   offerDefenseScenarios: [],    // TODO: needs validation
   hostObjectionPrompts: [],     // TODO: needs validation
+};
+
+/* ==========================================================================
+   VERSIONED MARKET DATA — ČAP and public industry statistics
+   Source: ČAP annual reports and public communications
+   ========================================================================== */
+export const marketData = {
+  cap2024: {
+    _source_name: 'ČAP – Česká asociace pojišťoven',
+    _source_url: 'https://www.cap.cz',
+    _retrieved_at: '2025-03-01',
+    _validated: true,
+    _confidence: 'high',
+    _product_area: 'majetek',
+    _tags: ['trh', 'statistika', 'škody', '2024'],
+    _valid_from: '2024-01-01',
+    _notes: 'Data za rok 2024 dle veřejných zpráv ČAP',
+    totalClaimCosts_mld: 37.4,
+    floodClaims_mld: 19.7,
+    totalClaimEvents: 576000,
+    displayTexts: {
+      headline: '37,4 mld. Kč',
+      subline: 'Náklady na pojistná plnění v majetku za rok 2024',
+      floodLine: '19,7 mld. Kč hlášených povodňových škod',
+      eventsLine: '576 tisíc pojistných událostí v majetku',
+    },
+  },
+};
+
+/* ==========================================================================
+   COMPETITOR DATA — Kooperativa public product information
+   Source: Official Kooperativa.cz public pages
+   ========================================================================== */
+export const competitorData = {
+  kooperativa: {
+    _source_name: 'Kooperativa pojišťovna – veřejná komunikace',
+    _source_url: 'https://www.koop.cz',
+    _retrieved_at: '2025-03-01',
+    _validated: true,
+    _confidence: 'high',
+    _competitor: 'Kooperativa',
+    _tags: ['konkurence', 'produkty', 'majetek'],
+    _needs_legal: false,
+    _needs_business: true,
+    _notes: 'Veřejně dostupné informace z webu Kooperativy',
+
+    rodinnyDum: {
+      variants: ['PRIMA', 'KOMFORT'],
+      prima: {
+        label: 'PRIMA',
+        covers: ['základní rizika', 'asistence'],
+        _notes: 'Základní varianta',
+      },
+      komfort: {
+        label: 'KOMFORT',
+        covers: ['základní rizika', 'asistence', 'krádež', 'vandalismus', 'havárie rozvodů', 'zatečení vodou střechou/oknem', 'poškození zateplení a oplocení zvířetem'],
+        _notes: 'Rozšířená varianta s nadstandardním krytím',
+      },
+    },
+
+    domacnost: {
+      risks: ['krádež/loupež', 'vandalismus', 'asistenční služby', 'náhradní ubytování', 'přepětí/podpětí v síti', 'zatečení atmosférických srážek', 'únik vody', 'havárie rozvodů', 'výměna zámků', 'rozbití skel a sanity', 'benefit OBNOVA při velké škodě'],
+      _notes: 'Souhrnný přehled komunikovaných rizik',
+    },
+
+    novinky: [
+      { text: 'Kontinuálně pojištěné věci v autě', _validated: true },
+      { text: 'Krádež a vandalismus dostupný i v PRIMA', _validated: true },
+      { text: 'Odpovědnost v běžném občanském životě – možnost sjednat samostatně', _validated: true },
+      { text: 'Limit po každé pojistné události místo za rok', _validated: true },
+    ],
+  },
 };

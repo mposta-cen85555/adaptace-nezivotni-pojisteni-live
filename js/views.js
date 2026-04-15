@@ -1,7 +1,8 @@
 /**
  * views.js — All view renderers: Landing, Join, Lobby, Host, Participant, Display, Arena
+ * Per-block arena archetypes with differentiated visual identities
  */
-import { agendaData, getBlockActivities, getRecommendedActivity, activities } from './data.js';
+import { agendaData, getBlockActivities, getRecommendedActivity, activities, arenaArchetypes, heroVisuals, marketData } from './data.js';
 import { store, bus, roomActions, timerActions, selectors } from './state.js';
 import { engine, icons, formatKc, formatTimer } from './engine.js';
 
@@ -133,7 +134,7 @@ export function renderParticipant() {
 }
 
 /* ==========================================================================
-   DISPLAY VIEW — projector / big screen
+   DISPLAY VIEW — projector / big screen — premium, high-impact
    ========================================================================== */
 export function renderDisplay() {
   const s = store.state;
@@ -145,6 +146,7 @@ export function renderDisplay() {
 }
 
 function renderDisplayIdle() {
+  const capData = marketData.cap2024;
   return `
     <div class="view-display">
       <div class="display-idle">
@@ -153,11 +155,22 @@ function renderDisplayIdle() {
         <p class="display-subtitle">Neživotní pojištění</p>
         ${store.state.room.code ? `
           <div class="display-room-code">
-            <div class="display-code-label">Kód pro připojení</div>
+            <div class="display-code-label">Připojte se</div>
             <div class="display-code-value">${store.state.room.code}</div>
           </div>
-          <div class="display-participant-count">${icons.users} ${store.state.participants.length} účastníků připojeno</div>
-        ` : '<p>Promítací režim – čekám na session.</p>'}
+          <div class="display-participant-count">${icons.users} ${store.state.participants.length} účastníků</div>
+        ` : `
+          <div class="display-market-stats">
+            <div class="display-stat">
+              <div class="display-stat-number">${capData.displayTexts.headline}</div>
+              <div class="display-stat-label">${capData.displayTexts.subline}</div>
+            </div>
+            <div class="display-stat">
+              <div class="display-stat-number">${capData.totalClaimEvents.toLocaleString('cs-CZ')}</div>
+              <div class="display-stat-label">pojistných událostí v majetku</div>
+            </div>
+          </div>
+        `}
       </div>
     </div>
   `;
@@ -166,13 +179,21 @@ function renderDisplayIdle() {
 function renderDisplayBlock(blockId) {
   const block = agendaData.find(b => b.id === blockId);
   if (!block) return '';
+  const hero = heroVisuals[blockId] || {};
+  const archetype = arenaArchetypes[blockId] || {};
+  const bgStyle = hero.cssGradient ? `background: ${hero.cssGradient};` : '';
+
   return `
-    <div class="view-display">
-      <div class="display-block-screen">
-        <div class="display-block-num">Blok ${block.id} / 8</div>
-        <h1 class="display-block-title">${block.name}</h1>
-        <p class="display-block-goal">${block.goal}</p>
-        <div class="display-block-time">${block.time}</div>
+    <div class="view-display" data-arena="${archetype.type || ''}">
+      <div class="display-block-screen" style="${bgStyle}">
+        <div class="display-hero-overlay"></div>
+        <div class="display-block-content">
+          <div class="display-block-badge">Blok ${block.id} / 8</div>
+          <h1 class="display-block-title">${block.name}</h1>
+          ${block.tagline ? `<p class="display-block-tagline">${block.tagline}</p>` : ''}
+          <p class="display-block-goal">${block.goal}</p>
+          <div class="display-block-time">${block.time} · ${block.durationMin} min</div>
+        </div>
       </div>
     </div>
   `;
@@ -212,6 +233,7 @@ function renderSessionChrome(mode) {
 
 /* ==========================================================================
    BLOCK SCREEN — the core block view (host + participant)
+   Per-block hero visual + arena archetype styling
    ========================================================================== */
 function renderBlockScreen(blockId, isHost) {
   const block = agendaData.find(b => b.id === blockId);
@@ -219,22 +241,32 @@ function renderBlockScreen(blockId, isHost) {
   const acts = getBlockActivities(blockId);
   const recommended = acts.find(a => a.recommended) || acts[0];
   const isDone = store.state.doneBlocks.has(blockId);
+  const hero = heroVisuals[blockId] || {};
+  const archetype = arenaArchetypes[blockId] || {};
+  const bgStyle = hero.cssGradient ? `background: ${hero.cssGradient};` : '';
 
   return `
     <main class="block-screen-main">
-      <section class="block-screen" data-block="${blockId}">
-        <div class="block-chapter-num">${blockIcons[block.icon] || ''}</div>
-        <div class="block-time-badge">${block.time}</div>
-        <h1 class="block-title">${block.name}</h1>
-        <p class="block-goal">${block.goal}</p>
-        <div class="block-meta-row">
-          <span class="block-meta-pill">${icons.clock} ${block.durationMin} min</span>
-          <span class="block-meta-pill">${block.activeRatio} aktivně</span>
+      <section class="block-screen" data-block="${blockId}" data-arena="${archetype.type || ''}">
+        <!-- Hero visual background -->
+        <div class="block-hero-bg" style="${bgStyle}">
+          <div class="block-hero-overlay"></div>
+        </div>
+        <div class="block-hero-content">
+          <div class="block-chapter-badge">Blok ${blockId}</div>
+          <div class="block-time-badge">${block.time}</div>
+          <h1 class="block-title">${block.name}</h1>
+          ${block.tagline ? `<p class="block-tagline">${block.tagline}</p>` : ''}
+          <p class="block-goal">${block.goal}</p>
+          <div class="block-meta-row">
+            <span class="block-meta-pill">${icons.clock} ${block.durationMin} min</span>
+            <span class="block-meta-pill">${block.activeRatio} aktivně</span>
+          </div>
         </div>
 
         <!-- Recommended activity card -->
         ${recommended ? `
-          <div class="activity-card activity-card--recommended" onclick="window._startActivity('${recommended.id}')">
+          <div class="activity-card activity-card--recommended" style="--arena-accent:${archetype.accent || 'var(--color-accent)'}" onclick="window._startActivity('${recommended.id}')">
             <div class="activity-card-label">Doporučená aktivita</div>
             <div class="activity-card-name">${recommended.name}</div>
             <div class="activity-card-brief">${recommended.brief}</div>
@@ -242,7 +274,7 @@ function renderBlockScreen(blockId, isHost) {
           </div>
         ` : ''}
 
-        <!-- All activities -->
+        <!-- All activities list (host only) -->
         ${isHost ? `
           <div class="block-activities-list">
             <div class="activities-list-label">Všechny aktivity</div>
@@ -268,7 +300,7 @@ function renderBlockScreen(blockId, isHost) {
 }
 
 /* ==========================================================================
-   ARENA VIEW — fullscreen activity execution
+   ARENA VIEW — fullscreen activity execution with per-block archetype
    ========================================================================== */
 export function renderArena() {
   const activityId = store.state.session.currentActivityId;
@@ -281,12 +313,25 @@ export function renderArena() {
   const template = engine.getTemplate(activityId);
   if (!template) return '<div class="arena-empty">Šablona nedostupná.</div>';
 
+  const blockId = activity.blockId;
+  const archetype = arenaArchetypes[blockId] || {};
+  const hero = heroVisuals[blockId] || {};
   const viewMode = store.state.isHostMode ? 'host' : 'participant';
-  return `<div class="view-arena">${template.render(activity, phase, viewMode)}</div>`;
+
+  return `
+    <div class="view-arena" data-arena="${archetype.type || ''}" data-block="${blockId}" style="--arena-accent:${archetype.accent || 'var(--color-accent)'}">
+      <div class="arena-bg" style="${hero.cssGradient ? `background: ${hero.cssGradient};` : ''}">
+        <div class="arena-bg-overlay"></div>
+      </div>
+      <div class="arena-content">
+        ${template.render(activity, phase, viewMode)}
+      </div>
+    </div>
+  `;
 }
 
 /* ==========================================================================
-   MAP VIEW — chapter overview (optional, accessible from host)
+   MAP VIEW — chapter overview with per-block visual identity
    ========================================================================== */
 export function renderMap() {
   return `
@@ -298,14 +343,18 @@ export function renderMap() {
       <div class="map-grid">
         ${agendaData.map(b => {
           const isDone = store.state.doneBlocks.has(b.id);
+          const hero = heroVisuals[b.id] || {};
+          const archetype = arenaArchetypes[b.id] || {};
           return `
-            <div class="map-tile ${isDone ? 'is-done' : ''}" onclick="window._goToBlock(${b.id})">
-              <div class="map-tile-icon">${blockIcons[b.icon] || ''}</div>
-              <div class="map-tile-num">${b.id}</div>
-              <div class="map-tile-time">${b.time}</div>
-              <div class="map-tile-name">${b.name}</div>
-              <div class="map-tile-goal">${b.goal}</div>
-              <div class="map-tile-meta">${b.durationMin} min · ${b.activeRatio}</div>
+            <div class="map-tile ${isDone ? 'is-done' : ''}" data-arena="${archetype.type || ''}" onclick="window._goToBlock(${b.id})" style="${hero.cssGradient ? `--tile-bg: ${hero.cssGradient};` : ''}">
+              <div class="map-tile-bg" style="${hero.cssGradient ? `background: ${hero.cssGradient};` : ''}"></div>
+              <div class="map-tile-content">
+                <div class="map-tile-num">${b.id}</div>
+                <div class="map-tile-time">${b.time}</div>
+                <div class="map-tile-name">${b.name}</div>
+                ${b.tagline ? `<div class="map-tile-tagline">${b.tagline}</div>` : ''}
+                <div class="map-tile-meta">${b.durationMin} min · ${b.activeRatio}</div>
+              </div>
             </div>
           `;
         }).join('')}
