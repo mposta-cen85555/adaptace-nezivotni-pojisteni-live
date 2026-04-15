@@ -330,38 +330,231 @@ export const contentData = {
     { id: 'td-find', result: 'info', text: 'Zjistit datum výročí smlouvy.' },
   ],
 
-  // Placeholder for all other content – to be filled by business team
-  // Each key matches the config reference in activities above
-  liquidatorArguments: [],      // TODO: needs validation
-  argumentCategories: [],       // TODO: needs validation
-  riskCards: [],                // TODO: needs validation
-  riskMapCategories: [],        // TODO: needs validation
-  coverageItems: [],            // TODO: needs validation
-  coverageBuckets: [],          // TODO: needs validation
-  cornerSituations: [],         // TODO: needs validation
-  votingSituations: [],         // TODO: needs validation
-  competitorComparisons: [],    // TODO: needs validation
-  phrasePrompts: [],            // TODO: needs validation
-  rushingClientPrompts: [],     // TODO: needs validation
-  blindConvoPrompts: [],        // TODO: needs validation
-  videoExamples: [],            // TODO: needs validation
-  transitionCriteria: [],       // TODO: needs validation
-  familyModelCases: [],         // TODO: needs validation
-  handoffPrompts: [],           // TODO: needs validation
-  completedOffers: [],          // TODO: needs validation
-  offerAuditCriteria: [],       // TODO: needs validation
-  budgetScenarios: [],          // TODO: needs validation
-  changeEventCases: [],         // TODO: needs validation
-  timelineEvents: [],           // TODO: needs validation
-  timelinePositions: [],        // TODO: needs validation
-  emergencyQuestions: [],       // TODO: needs validation
-  phoneNavPrompts: [],          // TODO: needs validation
-  tripleRoleplayPrompts: [],    // TODO: needs validation
-  objectionPrompts: [],         // TODO: needs validation
-  argumentCards: [],            // TODO: needs validation
-  argumentStrength: [],         // TODO: needs validation
-  offerDefenseScenarios: [],    // TODO: needs validation
-  hostObjectionPrompts: [],     // TODO: needs validation
+  /* ── Liquidator arguments (B2A2) ── */
+  liquidatorArguments: [
+    { id: 'la1', text: 'Fotodokumentace škody z místa události', category: 'důkazy', _validated: false },
+    { id: 'la2', text: 'Výpověď svědka – souseda', category: 'svědectví', _validated: false },
+    { id: 'la3', text: 'Faktura za opravu od certifikované firmy', category: 'důkazy', _validated: false },
+    { id: 'la4', text: 'Zápis hasičského záchranného sboru', category: 'úřední', _validated: false },
+    { id: 'la5', text: 'Původní účtenka za poškozenou věc', category: 'důkazy', _validated: false },
+    { id: 'la6', text: 'Protokol policie o vloupání', category: 'úřední', _validated: false },
+  ],
+  argumentCategories: [
+    { id: 'ac1', label: 'Důkazy a dokumentace', key: 'důkazy', _validated: false },
+    { id: 'ac2', label: 'Svědecké výpovědi', key: 'svědectví', _validated: false },
+    { id: 'ac3', label: 'Úřední záznamy', key: 'úřední', _validated: false },
+  ],
+
+  /* ── Risk cards (B2A4) ── */
+  riskCards: [
+    { id: 'rc1', label: 'Požár', description: 'Oheň z vlastního nebo cizího zdroje', category: 'živel', _validated: false },
+    { id: 'rc2', label: 'Záplava / povodeň', description: 'Voda z přírodních zdrojů nebo havárie', category: 'živel', _validated: false },
+    { id: 'rc3', label: 'Vloupání', description: 'Neoprávněný vstup a odcizení věcí', category: 'krádež', _validated: false },
+    { id: 'rc4', label: 'Vandalismus', description: 'Úmyslné poškození cizí osobou', category: 'krádež', _validated: false },
+    { id: 'rc5', label: 'Odpovědnost za škodu dítětem', description: 'Dítě poškodí cizí majetek', category: 'odpovědnost', _validated: false },
+    { id: 'rc6', label: 'Pád stromu na sousedův dům', description: 'Strom z vlastního pozemku', category: 'odpovědnost', _validated: false },
+  ],
+  riskMapCategories: [
+    { id: 'rmc1', label: 'Živelní rizika', key: 'živel', _validated: false },
+    { id: 'rmc2', label: 'Krádež a vandalismus', key: 'krádež', _validated: false },
+    { id: 'rmc3', label: 'Odpovědnostní rizika', key: 'odpovědnost', _validated: false },
+  ],
+
+  /* ── Coverage items and buckets (B2A5) ── */
+  coverageItems: [
+    { id: 'ci1', label: 'Požár a výbuch', bucket: 'pojištění nemovitosti', _validated: false },
+    { id: 'ci2', label: 'Krádež vloupáním', bucket: 'pojištění domácnosti', _validated: false },
+    { id: 'ci3', label: 'Vichřice a krupobití', bucket: 'pojištění nemovitosti', _validated: false },
+    { id: 'ci4', label: 'Odpovědnost za škodu způsobenou psem', bucket: 'odpovědnost', _validated: false },
+    { id: 'ci5', label: 'Přepětí v elektroinstalaci', bucket: 'pojištění domácnosti', _validated: false },
+    { id: 'ci6', label: 'Pád stromu na sousedovu zeď', bucket: 'odpovědnost', _validated: false },
+  ],
+  coverageBuckets: [
+    { id: 'cb1', label: 'Pojištění nemovitosti', key: 'pojištění nemovitosti', _validated: false },
+    { id: 'cb2', label: 'Pojištění domácnosti', key: 'pojištění domácnosti', _validated: false },
+    { id: 'cb3', label: 'Pojištění odpovědnosti', key: 'odpovědnost', _validated: false },
+  ],
+
+  /* ── Corner situations (B3A2) ── */
+  cornerSituations: [
+    { id: 'cs1', text: 'Vytopili jste souseda pod vámi – prasklá hadička u pračky.', correct: 'Roh A – Občanská', explanation: 'Škoda způsobená vaší nedbalostí – občanská odpovědnost.', _validated: false },
+    { id: 'cs2', text: 'Opadávající omítka z vašeho domu poškodila zaparkované auto.', correct: 'Roh B – Nemovitost', explanation: 'Odpovědnost vlastníka nemovitosti za stav budovy.', _validated: false },
+    { id: 'cs3', text: 'Řidič taxíku způsobil nehodu s vaším autem při práci.', correct: 'Roh C – Výluka', explanation: 'Profesní odpovědnost zaměstnavatele – mimo běžné občanské pojištění.', _validated: false },
+    { id: 'cs4', text: 'Váš pes utekl a pokousal cyklistu na veřejné cestě.', correct: 'Roh A – Občanská', explanation: 'Odpovědnost vlastníka zvířete v běžném občanském životě.', _validated: false },
+    { id: 'cs5', text: 'Ze střechy vašeho domu sjel sníh na chodce.', correct: 'Roh B – Nemovitost', explanation: 'Povinnost vlastníka nemovitosti udržovat bezpečný stav.', _validated: false },
+    { id: 'cs6', text: 'Klient si stěžuje na špatnou radu od finančního poradce.', correct: 'Roh D – Nejasné', explanation: 'Hraniční případ – může jít o profesní odpovědnost.', _validated: false },
+  ],
+
+  /* ── Voting situations (B3A3) ── */
+  votingSituations: [
+    { id: 'vs1', text: 'Klient má bazén a soused se v něm utopí – kryje to pojištění nemovitosti?', _validated: false },
+    { id: 'vs2', text: 'Klient provozuje Airbnb v bytě – vztahuje se pojištění domácnosti?', _validated: false },
+    { id: 'vs3', text: 'Dítě (5 let) hodí kámen a rozbije auto souseda – kryto odpovědností?', _validated: false },
+    { id: 'vs4', text: 'Klient zapomene zavřít okno a déšť zničí nábytek – hradí pojistka?', _validated: false },
+  ],
+
+  /* ── Competitor comparisons (B3A5) ── */
+  competitorComparisons: [
+    { id: 'cc1', name: 'Záplava bytu – PRIMA vs. ČS', situation: 'Záplava přízemního bytu – škoda na domácnosti i nemovitosti.', csAdvantage: 'Širší krytí zatečení bez příplatku v základní variantě.', koopNote: 'PRIMA kryje základní živelní rizika, rozšíření v KOMFORT.', _validated: false },
+    { id: 'cc2', name: 'Odpovědnost za psa – srovnání', situation: 'Pes pokouše souseda – klient potřebuje krytí odpovědnosti.', csAdvantage: 'Odpovědnost za zvíře součástí pojištění domácnosti.', koopNote: 'Odpovědnost v běžném občanském životě – možno sjednat samostatně.', _validated: false },
+    { id: 'cc3', name: 'Limit plnění po události', situation: 'Klient má druhou pojistnou událost v roce – jak fungují limity?', csAdvantage: 'Standardní roční limity dle varianty.', koopNote: 'Novinka: limit po každé pojistné události místo za rok.', _validated: false },
+  ],
+
+  /* ── Phrase prompts (B4A2) ── */
+  phrasePrompts: [
+    { round: 1, context: 'Klient říká: „Přišel jsem kvůli spoření."', task: 'Reagujte jednou větou a přirozeně otevřete téma pojištění.', _validated: false },
+    { round: 2, context: 'Klient říká: „Nedávno jsme se přestěhovali."', task: 'Navažte na stěhování a zjistěte stav pojištění.', _validated: false },
+    { round: 3, context: 'Klient říká: „Máme malé děti, hodně toho ničí."', task: 'Přirozeně přejděte k pojištění odpovědnosti.', _validated: false },
+    { round: 4, context: 'Klient říká: „Bydlíme v rodinném domě."', task: 'Zjistěte, zda má pojištění nemovitosti.', _validated: false },
+    { round: 5, context: 'Klient říká: „Řešíme rekonstrukci koupelny."', task: 'Upozorněte na riziko pojistné události při rekonstrukci.', _validated: false },
+  ],
+
+  /* ── Rushing client prompts (B4A3) ── */
+  rushingClientPrompts: [
+    { round: 1, context: 'Klient: „Mám schůzku za 10 minut, pojďme to rychle."', task: 'Stručně a efektivně zjistěte klíčové potřeby.', _validated: false },
+    { round: 2, context: 'Klient: „To pojištění teď neřeším, přišel jsem kvůli účtu."', task: 'Respektujte, ale zanechte zájem o budoucí schůzku.', _validated: false },
+    { round: 3, context: 'Klient: „Nemám čas na detaily, řekněte mi jen cenu."', task: 'Sdělte orientační rozsah a nabídněte podrobnou schůzku.', _validated: false },
+  ],
+
+  /* ── Blind convo prompts (B4A4) ── */
+  blindConvoPrompts: [
+    { round: 1, context: 'Klient sedí před vámi – nemáte k dispozici žádný systém.', task: 'Zjistěte základní údaje pro pojištění pouze rozhovorem.', _validated: false },
+    { round: 2, context: 'Klient popisuje svou životní situaci – vy si děláte poznámky na papír.', task: 'Identifikujte 3 hlavní rizika a navrhněte pokrytí.', _validated: false },
+  ],
+
+  /* ── Video examples (B4A5) ── */
+  videoExamples: [
+    { id: 've1', label: 'Ukázka A – příliš přímý přechod', description: 'Bankéř skočí rovnou k pojištění bez kontextu.', rating: 'slabé', _validated: false },
+    { id: 've2', label: 'Ukázka B – přirozený přechod', description: 'Bankéř navazuje na klientovu zmínku o bydlení.', rating: 'silné', _validated: false },
+    { id: 've3', label: 'Ukázka C – přechod přes životní událost', description: 'Bankéř využívá zmínku o narození dítěte.', rating: 'silné', _validated: false },
+    { id: 've4', label: 'Ukázka D – zmeškaný moment', description: 'Klient sám zmíní riziko, bankéř nereaguje.', rating: 'slabé', _validated: false },
+  ],
+  transitionCriteria: [
+    { id: 'tc1', label: 'Přirozenost přechodu', description: 'Byl přechod k nabídce plynulý a nenásilný?', weight: 3, _validated: false },
+    { id: 'tc2', label: 'Navázání na kontext', description: 'Vycházel přechod z toho, co klient sám řekl?', weight: 3, _validated: false },
+    { id: 'tc3', label: 'Zachování důvěry', description: 'Nenarušil přechod důvěru klienta?', weight: 2, _validated: false },
+    { id: 'tc4', label: 'Jasnost sdělení', description: 'Bylo klientovi zřejmé, proč mluvíme o pojištění?', weight: 2, _validated: false },
+  ],
+
+  /* ── Family model cases (B5A1) ── */
+  familyModelCases: [
+    { id: 'fmc1', name: 'Novákovi – panelák', type: 'Byt 3+1 v panelovém domě', members: '2 dospělí, 2 děti (6 a 10 let)', budget: '500 Kč/měs.', needs: ['domácnost', 'odpovědnost za děti', 'pojištění bytu'], _validated: false },
+    { id: 'fmc2', name: 'Svobodovi – rodinný dům', type: 'RD se zahradou a garáží', members: '2 dospělí, pes, kočka', budget: '800 Kč/měs.', needs: ['nemovitost', 'domácnost', 'odpovědnost za psa', 'garáž'], _validated: false },
+    { id: 'fmc3', name: 'Horáčkovi – chalupa + byt', type: 'Pronájem bytu + rekreační chalupa', members: '2 senioři', budget: '600 Kč/měs.', needs: ['odpovědnost pronajímatele', 'pojištění chalupy', 'domácnost'], _validated: false },
+  ],
+
+  /* ── Handoff prompts (B5A2) ── */
+  handoffPrompts: [
+    { round: 1, context: 'Kolega rozdělaný model pro Novákovi – má vyplněnou nemovitost, chybí domácnost.', task: 'Převezměte model a doplňte pojištění domácnosti.', _validated: false },
+    { round: 2, context: 'Kolega nastavil odpovědnost pro Svobodovi, ale zapomněl na psa.', task: 'Zkontrolujte a doplňte chybějící krytí.', _validated: false },
+    { round: 3, context: 'Rozpracovaná nabídka pro Horáčkovi – pouze chalupa, chybí pronájem.', task: 'Doplňte pojištění odpovědnosti pronajímatele.', _validated: false },
+  ],
+
+  /* ── Completed offers for peer review (B5A3) ── */
+  completedOffers: [
+    { id: 'co1', label: 'Nabídka A – podpojištěná domácnost', description: 'Pojistná částka domácnosti 200 000 Kč pro byt 3+1 – pravděpodobně podpojištěno.', error: 'Nízká pojistná částka domácnosti', _validated: false },
+    { id: 'co2', label: 'Nabídka B – chybějící odpovědnost', description: 'Pojištění nemovitosti i domácnosti OK, ale bez odpovědnosti – rodina s dětmi.', error: 'Chybí pojištění odpovědnosti', _validated: false },
+    { id: 'co3', label: 'Nabídka C – správně sestavená', description: 'Kompletní pojištění RD + domácnost + odpovědnost, přiměřené limity.', error: null, _validated: false },
+    { id: 'co4', label: 'Nabídka D – zbytečně drahá', description: 'Vysoké limity a nízká spoluúčast pro garsonku – předražená nabídka.', error: 'Nepřiměřený rozsah krytí k potřebám', _validated: false },
+  ],
+  offerAuditCriteria: [
+    { id: 'oac1', label: 'Přiměřenost pojistných částek', description: 'Odpovídají pojistné částky reálné hodnotě majetku?', weight: 3, _validated: false },
+    { id: 'oac2', label: 'Kompletnost krytí', description: 'Jsou pokryta všechna relevantní rizika klienta?', weight: 3, _validated: false },
+    { id: 'oac3', label: 'Spoluúčast vs. pojistné', description: 'Je nastavení spoluúčasti optimální pro klienta?', weight: 2, _validated: false },
+    { id: 'oac4', label: 'Rozpočet klienta', description: 'Vejde se nabídka do stanoveného rozpočtu?', weight: 2, _validated: false },
+  ],
+
+  /* ── Budget scenarios (B5A4) ── */
+  budgetScenarios: [
+    { id: 'bs1', label: 'Rodina, 500 Kč/měsíc', budget: 500, needs: ['domácnost', 'odpovědnost'], priorityOrder: ['domácnost', 'odpovědnost'], _validated: false },
+    { id: 'bs2', label: 'Pár v RD, 800 Kč/měsíc', budget: 800, needs: ['nemovitost', 'domácnost', 'odpovědnost'], priorityOrder: ['nemovitost', 'domácnost', 'odpovědnost'], _validated: false },
+    { id: 'bs3', label: 'Senior, 400 Kč/měsíc', budget: 400, needs: ['domácnost', 'odpovědnost'], priorityOrder: ['domácnost', 'odpovědnost'], _validated: false },
+    { id: 'bs4', label: 'Pronajímatel, 700 Kč/měsíc', budget: 700, needs: ['nemovitost', 'odpovědnost pronajímatele', 'domácnost'], priorityOrder: ['nemovitost', 'odpovědnost pronajímatele', 'domácnost'], _validated: false },
+  ],
+
+  /* ── Change event cases (B5A5) ── */
+  changeEventCases: [
+    { id: 'cec1', name: 'Novákovi – nečekané dvojčata', initialSetup: 'Model pro 2+2 rodinu', change: 'Klientka otěhotněla s dvojčaty – mění se potřeby.', impact: 'Vyšší pojistné částky domácnosti, odpovědnost za 4 děti.', _validated: false },
+    { id: 'cec2', name: 'Svobodovi – rekonstrukce', initialSetup: 'Model pro stávající RD', change: 'Klient oznamuje přístavbu patra za odhadovaných 1,5 mil. Kč.', impact: 'Přecenění nemovitosti, úprava pojistné částky.', _validated: false },
+    { id: 'cec3', name: 'Horáčkovi – prodej chalupy', initialSetup: 'Model s chalupou + bytem', change: 'Senioři prodávají chalupu a kupují menší byt.', impact: 'Zrušení pojištění chalupy, nová smlouva pro druhý byt.', _validated: false },
+  ],
+
+  /* ── Timeline events and positions (B6A1) ── */
+  timelineEvents: [
+    { id: 'te1', label: 'Klient se rozhodne přejít k ČS', position: 1, description: 'Rozhodnutí o změně pojišťovny na základě nabídky.', _validated: false },
+    { id: 'te2', label: 'Odeslání výpovědi stávající pojišťovně', position: 2, description: 'Písemná výpověď odeslaná doporučeně.', _validated: false },
+    { id: 'te3', label: 'Doručení výpovědi (min. 6 týdnů před výročím)', position: 3, description: 'Výpověď musí být doručena min. 6 týdnů před výročím.', _validated: false },
+    { id: 'te4', label: 'Konec pojistného období (výročí)', position: 4, description: 'Stará smlouva končí ke dni výročí.', _validated: false },
+    { id: 'te5', label: 'Sjednání nové smlouvy u ČS', position: 5, description: 'Nová smlouva navazuje bez přerušení krytí.', _validated: false },
+  ],
+  timelinePositions: [
+    { id: 'tp1', label: '8+ týdnů před výročím', position: 1, _validated: false },
+    { id: 'tp2', label: '6–8 týdnů před výročím', position: 2, _validated: false },
+    { id: 'tp3', label: '6 týdnů – výročí', position: 3, _validated: false },
+    { id: 'tp4', label: 'Den výročí smlouvy', position: 4, _validated: false },
+    { id: 'tp5', label: 'Po výročí – nová smlouva', position: 5, _validated: false },
+  ],
+
+  /* ── Emergency questions (B6A4) ── */
+  emergencyQuestions: [
+    { q: 'Klient volá: „Zítra mi končí smlouva, můžu ještě podat výpověď?"', options: ['Ano, stačí zavolat', 'Ne, je pozdě – min. 6 týdnů předem', 'Ano, stačí e-mail', 'Záleží na pojišťovně'], correct: 1, _validated: false },
+    { q: 'Klient se ptá: „Měl jsem pojistnou událost – můžu odejít od pojišťovny?"', options: ['Ne, musí počkat na výročí', 'Ano, mimořádná výpověď do 1 měsíce', 'Ano, do 14 dní', 'Pouze pokud pojišťovna souhlasí'], correct: 1, _validated: false },
+    { q: 'Klient říká: „Pojišťovna mi zvýšila pojistné – co s tím?"', options: ['Nic, musí zaplatit', 'Může podat výpověď do 1 měsíce od oznámení', 'Zvýšení je vždy nezákonné', 'Může to ignorovat'], correct: 1, _validated: false },
+    { q: 'Kdy může klient vypovědět smlouvu bez udání důvodu?', options: ['Kdykoliv', 'Pouze do 2 měsíců od sjednání', 'K výročí s 6týdenní výpovědní lhůtou', 'Pouze po pojistné události'], correct: 2, _validated: false },
+  ],
+
+  /* ── Phone nav prompts (B6A5) ── */
+  phoneNavPrompts: [
+    { round: 1, context: 'Klient volá: „Chci zrušit pojistku u jiné pojišťovny a přejít k vám."', task: 'Proveďte klienta kroky výpovědi po telefonu.', _validated: false },
+    { round: 2, context: 'Klient volá: „Nevím, kdy mi končí smlouva, nemám ji po ruce."', task: 'Poraďte, jak zjistit datum výročí, a domluvte postup.', _validated: false },
+  ],
+
+  /* ── Triple roleplay prompts (B7A1) ── */
+  tripleRoleplayPrompts: [
+    { round: 1, context: 'Klient s hypotékou – banka doporučuje pojištění nemovitosti.', bankéřTask: 'Představte nabídku a reagujte na dotazy.', klientTask: 'Ptejte se na cenu a srovnání s vaší stávající pojistkou.', pozorovatelTask: 'Sledujte, zda bankéř aktivně naslouchá a reaguje na potřeby.', _validated: false },
+    { round: 2, context: 'Mladý pár kupuje první byt – nemají žádné pojištění.', bankéřTask: 'Vysvětlete potřebu pojištění domácnosti a odpovědnosti.', klientTask: 'Máte omezený rozpočet – ptejte se na minimum.', pozorovatelTask: 'Hodnoťte srozumitelnost a práci s rozpočtem klienta.', _validated: false },
+    { round: 3, context: 'Senior s existující pojistkou u konkurence – nespokojený se službami.', bankéřTask: 'Nabídněte přechod a vysvětlete proces výpovědi.', klientTask: 'Bojíte se změny a složitosti přechodu.', pozorovatelTask: 'Sledujte, zda bankéř buduje důvěru a trpělivě vysvětluje.', _validated: false },
+  ],
+
+  /* ── Objection prompts for speed-dating (B7A2) ── */
+  objectionPrompts: [
+    { round: 1, context: 'Klient: „To je moc drahé, jinde platím míň."', task: 'Reagujte na cenovou námitku – srovnejte rozsah krytí.', _validated: false },
+    { round: 2, context: 'Klient: „Nikdy se mi nic nestalo, nepotřebuji to."', task: 'Pracujte s argumentem pravděpodobnosti a dopadu.', _validated: false },
+    { round: 3, context: 'Klient: „Musím se poradit s manželkou/manželem."', task: 'Respektujte, ale zanechte materiál a domluvte další krok.', _validated: false },
+    { round: 4, context: 'Klient: „Zavolám vám, až to budu řešit."', task: 'Přeměňte vágní slib na konkrétní termín.', _validated: false },
+    { round: 5, context: 'Klient: „Pojištění je zbytečný výdaj."', task: 'Ukažte poměr cena vs. potenciální škoda.', _validated: false },
+    { round: 6, context: 'Klient: „Mám pojistku u Kooperativy a jsem spokojený."', task: 'Nabídněte srovnání bez kritiky konkurence.', _validated: false },
+  ],
+
+  /* ── Argument cards and strength criteria (B7A3) ── */
+  argumentCards: [
+    { id: 'argc1', label: 'Šíře krytí', argument: 'Naše pojištění kryje více rizik v základní variantě.', strength: 'silný', _validated: false },
+    { id: 'argc2', label: 'Cena vs. hodnota', argument: 'Rozdíl v ceně je malý oproti rozsahu krytí navíc.', strength: 'silný', _validated: false },
+    { id: 'argc3', label: 'Osobní přístup', argument: 'Máte osobního bankéře, kterého znáte – ne jen call centrum.', strength: 'střední', _validated: false },
+    { id: 'argc4', label: 'Rychlost likvidace', argument: 'Škody řešíme rychle – průměrně do několika pracovních dní.', strength: 'střední', _validated: false },
+    { id: 'argc5', label: 'Kompletní servis', argument: 'Pojištění, účet, hypotéka – vše na jednom místě.', strength: 'silný', _validated: false },
+  ],
+  argumentStrength: [
+    { id: 'as1', label: 'Relevance pro klienta', description: 'Je argument relevantní pro konkrétní situaci klienta?', weight: 3, _validated: false },
+    { id: 'as2', label: 'Ověřitelnost', description: 'Může si klient argument snadno ověřit?', weight: 2, _validated: false },
+    { id: 'as3', label: 'Emocionální dopad', description: 'Oslovuje argument klienta i emočně, nejen racionálně?', weight: 2, _validated: false },
+  ],
+
+  /* ── Offer defense scenarios (B7A4) ── */
+  offerDefenseScenarios: [
+    { id: 'ods1', text: 'Nabídka pro mladou rodinu: 450 Kč/měsíc za domácnost + odpovědnost. Klient říká: „To je moc."', _validated: false },
+    { id: 'ods2', text: 'Nabídka pro seniory: přechod z Kooperativy, cena srovnatelná. Klient říká: „Proč měnit?"', _validated: false },
+    { id: 'ods3', text: 'Nabídka pro RD: 750 Kč/měsíc, kompletní balíček. Klient říká: „Soused platí polovinu."', _validated: false },
+  ],
+
+  /* ── Host objection prompts (B7A5) ── */
+  hostObjectionPrompts: [
+    { round: 1, context: 'Lektor jako klient: „Ukažte mi černé na bílém, proč je to lepší."', task: 'Prezentujte konkrétní srovnání výhod.', _validated: false },
+    { round: 2, context: 'Lektor jako klient: „Kamarád mi řekl, že pojistky z banky jsou předražené."', task: 'Vyvrátit mýtus a argumentovat fakty.', _validated: false },
+    { round: 3, context: 'Lektor jako klient: „A co když se mi nic nestane? Ty peníze jsou pryč."', task: 'Vysvětlete princip pojištění a porovnejte s rizikem.', _validated: false },
+    { round: 4, context: 'Lektor jako klient: „Mám to v mobilu od Direct – je to jednodušší."', task: 'Zdůrazněte osobní servis a podporu při likvidaci.', _validated: false },
+    { round: 5, context: 'Lektor jako klient: „OK, ale chci slevu."', task: 'Pracujte s hodnotou nabídky, ne jen s cenou.', _validated: false },
+  ]
 };
 
 /* ==========================================================================
@@ -434,4 +627,178 @@ export const competitorData = {
       { text: 'Limit po každé pojistné události místo za rok', _validated: true },
     ],
   },
+};
+
+/* ==========================================================================
+   INSIGHT DATA — educational/data brief content shown between blocks
+   Per-block insight cards with statistics, context, and talking points
+   ========================================================================== */
+export const insightData = {
+  block1: {
+    dataBrief: {
+      title: 'Realita škod v ČR',
+      stats: [
+        { label: 'Pojistná plnění v majetku', value: '37,4 mld. Kč', note: 'za rok 2024' },
+        { label: 'Povodňové škody', value: '19,7 mld. Kč', note: 'hlášeno v roce 2024' },
+        { label: 'Pojistných událostí v majetku', value: '~576 tisíc', note: 'za rok 2024' },
+      ],
+      source: 'ČAP 2024',
+      _validated: false,
+    },
+    insightCards: [
+      { title: 'Průměrná škoda roste', text: 'Průměrná škoda na pojistné události v majetku se meziročně zvyšuje – vliv inflace i klimatických jevů.', highlight: 'Průměrná škoda se meziročně zvyšuje', source: 'ČAP 2024', _validated: false },
+      { title: 'Podpojištění je běžné', text: 'Odhadem 30–40 % domácností v ČR nemá dostatečné pojistné částky – reálná hodnota majetku převyšuje pojistnou částku.', highlight: 'Odhadem 30–40 % domácností je podpojištěno', source: 'Odhad ČAP / odborné články', _validated: false },
+      { title: 'Záplavy jako hlavní hrozba', text: 'Povodňové a záplavové škody tvoří více než polovinu celkových pojistných plnění v majetku.', highlight: 'Povodně = více než polovina plnění', source: 'ČAP 2024', _validated: false },
+    ],
+  },
+
+  block2: {
+    dataBrief: {
+      title: 'Parametry pojištění v praxi',
+      stats: [
+        { label: 'Nejčastější typ domácnosti', value: 'Byt 2+1 / 3+1', note: 'panelový dům' },
+        { label: 'Kooperativa – varianty RD', value: 'PRIMA / KOMFORT', note: 'veřejně komunikované' },
+        { label: 'Klíčový rozdíl variant', value: 'Rozsah krytí', note: 'KOMFORT přidává vandalismus, havárie rozvodů aj.' },
+      ],
+      source: 'ČAP 2024 / Kooperativa veřejné zdroje',
+      _validated: false,
+    },
+    insightCards: [
+      { title: 'Domácnost vs. nemovitost', text: 'Klienti často zaměňují pojištění domácnosti (movité věci) a nemovitosti (stavba). Správné vysvětlení je klíčové.', highlight: 'Nejčastější záměna pojmů', source: 'Interní zkušenost', _validated: false },
+      { title: 'Kooperativa KOMFORT', text: 'Rozšířená varianta Kooperativy zahrnuje mj. vandalismus, havárii rozvodů a zatečení vodou střechou – srovnejte s naší nabídkou.', highlight: 'Vandalismus + havárie rozvodů v KOMFORT', source: 'Kooperativa.cz', _validated: false },
+      { title: 'Spoluúčast jako nástroj', text: 'Vyšší spoluúčast snižuje pojistné, ale klient platí více při škodě. Správné nastavení šetří i chrání.', highlight: 'Spoluúčast = klíčový parametr', source: 'Obecný princip', _validated: false },
+    ],
+  },
+
+  block3: {
+    dataBrief: {
+      title: 'Odpovědnost – co klienti netuší',
+      stats: [
+        { label: 'Typy odpovědnosti', value: '3 základní', note: 'občanská, z nemovitosti, profesní' },
+        { label: 'Kooperativa – odpovědnost', value: 'Samostatně sjednatelná', note: 'novinka v produktové řadě' },
+        { label: 'Nejčastější škody', value: 'Vytopení souseda', note: 'odhadem desítky tisíc případů ročně' },
+      ],
+      source: 'Kooperativa.cz / ČAP odhady',
+      _validated: false,
+    },
+    insightCards: [
+      { title: 'Odpovědnost za psa', text: 'Pokousání cizí osoby psem je jednou z nejčastějších odpovědnostních škod. Krytí je součástí pojištění domácnosti.', highlight: 'Pes = časté odpovědnostní škody', source: 'Praxe likvidace', _validated: false },
+      { title: 'Odpovědnost vlastníka nemovitosti', text: 'Pád sněhu ze střechy, uvolněná omítka – vlastník nese odpovědnost za stav budovy vůči třetím osobám.', highlight: 'Vlastník ručí za stav budovy', source: 'Občanský zákoník', _validated: false },
+      { title: 'Kooperativa – samostatná odpovědnost', text: 'Kooperativa nově umožňuje sjednat odpovědnost v běžném občanském životě samostatně, bez pojištění domácnosti.', highlight: 'Samostatné sjednání u konkurence', source: 'Kooperativa.cz', _validated: false },
+    ],
+  },
+
+  block4: {
+    dataBrief: {
+      title: 'Přechod k nabídce – klíčový moment',
+      stats: [
+        { label: 'Úspěšnost přechodu', value: 'Závisí na přirozenosti', note: 'nácvik zvyšuje úspěšnost' },
+        { label: 'Nejčastější chyba', value: 'Příliš přímý přechod', note: 'klient ztratí důvěru' },
+        { label: 'Ideální moment', value: 'Životní událost', note: 'stěhování, dítě, hypotéka' },
+      ],
+      source: 'Interní metodika',
+      _validated: false,
+    },
+    insightCards: [
+      { title: 'Princip FIT', text: 'FIT = Fakta, Informace, Transformace. Nejprve zjistěte fakta o klientovi, pak informujte o rizicích a přirozeně transformujte do nabídky.', highlight: 'FIT = Fakta → Informace → Transformace', source: 'Interní metodika', _validated: false },
+      { title: 'Životní události', text: 'Stěhování, narození dítěte, koupě nemovitosti – tyto momenty jsou přirozený vstup do tématu pojištění.', highlight: 'Životní událost = přirozený moment', source: 'Obchodní praxe', _validated: false },
+      { title: 'Neprodávejte – řešte potřebu', text: 'Klient nechce slyšet „mám pro vás nabídku" – chce slyšet „to se dá jednoduše ošetřit".', highlight: 'Řešení potřeby > prodejní fráze', source: 'Interní metodika', _validated: false },
+    ],
+  },
+
+  block5: {
+    dataBrief: {
+      title: 'Modelování nabídek – systém Hades',
+      stats: [
+        { label: 'Hlavní produkt', value: 'Pojištění majetku ČS', note: 'domácnost + nemovitost + odpovědnost' },
+        { label: 'Kooperativa srovnání', value: 'PRIMA / KOMFORT', note: 'dvě varianty vs. modulární přístup ČS' },
+        { label: 'Klíčový cíl', value: 'Nabídka na míru', note: 'odpovídající reálným potřebám klienta' },
+      ],
+      source: 'Kooperativa.cz / interní produktová dokumentace',
+      _validated: false,
+    },
+    insightCards: [
+      { title: 'Podpojištění zabíjí důvěru', text: 'Když klient zjistí při škodě, že má nízkou pojistnou částku, ztrácí důvěru v bankéře i pojišťovnu.', highlight: 'Správná pojistná částka = základ', source: 'Likvidační praxe', _validated: false },
+      { title: 'Kooperativa – benefit OBNOVA', text: 'Kooperativa nabízí benefit OBNOVA při velké škodě na domácnosti – srovnejte s naším přístupem ke kompenzaci.', highlight: 'Benefit OBNOVA u konkurence', source: 'Kooperativa.cz', _validated: false },
+      { title: 'Rozpočet klienta je reálný limit', text: 'Ideální nabídka musí respektovat rozpočet. Učte se prioritizovat: nejprve největší rizika, pak rozšiřovat.', highlight: 'Prioritizace rizik dle rozpočtu', source: 'Obchodní metodika', _validated: false },
+    ],
+  },
+
+  block6: {
+    dataBrief: {
+      title: 'Lhůty a termíny – zákonný rámec',
+      stats: [
+        { label: 'Výpovědní lhůta', value: '6 týdnů', note: 'před koncem pojistného období' },
+        { label: 'Mimořádná výpověď', value: 'Do 1 měsíce', note: 'po pojistné události nebo změně pojistného' },
+        { label: 'Výpověď do 2 měsíců', value: 'Od sjednání', note: 'bez udání důvodu, 8denní výpovědní doba' },
+      ],
+      source: 'Zákon č. 89/2012 Sb., občanský zákoník',
+      _validated: false,
+    },
+    insightCards: [
+      { title: '6 týdnů je klíčová lhůta', text: 'Výpověď musí být doručena pojišťovně nejpozději 6 týdnů před koncem pojistného období. Nestačí odeslat – musí být doručena.', highlight: 'Doručení, ne odeslání!', source: 'Občanský zákoník § 2804', _validated: false },
+      { title: 'Mimořádná výpověď po škodě', text: 'Po pojistné události může klient i pojistitel vypovědět smlouvu do 1 měsíce od ukončení šetření. Výpovědní doba je 1 měsíc.', highlight: 'Do 1 měsíce po ukončení šetření', source: 'Občanský zákoník § 2805', _validated: false },
+      { title: 'Přerušení krytí = riziko', text: 'Mezi zrušením staré a sjednáním nové smlouvy nesmí být mezera – klient by byl bez krytí. Navazujte smlouvy k datu výročí.', highlight: 'Bez mezery v krytí', source: 'Obchodní praxe', _validated: false },
+    ],
+  },
+
+  block7: {
+    dataBrief: {
+      title: 'Námitky – vzorce a reakce',
+      stats: [
+        { label: 'Nejčastější námitka', value: '„To je drahé"', note: 'cenová námitka v odhadovaných 40–50 % případů' },
+        { label: 'Druhá nejčastější', value: '„Nepotřebuji to"', note: 'odmítnutí potřeby pojištění' },
+        { label: 'Nejtěžší námitka', value: '„Mám jinde, jsem spokojený"', note: 'status quo – těžké překonat' },
+      ],
+      source: 'Interní obchodní data (odhad)',
+      _validated: false,
+    },
+    insightCards: [
+      { title: 'Cenová námitka ≠ problém s cenou', text: 'Když klient říká „je to drahé", často znamená „nevím, za co platím". Řešte hodnotu, ne slevu.', highlight: 'Námitka ceny = nedostatek hodnoty', source: 'Obchodní metodika', _validated: false },
+      { title: '„Nikdy se mi nic nestalo"', text: 'Statisticky se pojistná událost majetku stane jednomu z pěti domácností během 10 let. To nejsou malá čísla.', highlight: 'Odhadem 1 z 5 domácností za 10 let', source: 'ČAP odhady', _validated: false },
+      { title: 'Status quo je nejsilnější', text: 'Klient, který je „spokojený jinde", potřebuje důvod ke změně, ne kritiku konkurence. Nabídněte srovnání bez hodnocení.', highlight: 'Srovnání > kritika konkurence', source: 'Obchodní praxe', _validated: false },
+      { title: 'Odložení ≠ odmítnutí', text: 'Když klient říká „zavolám příští týden", přeměňte na konkrétní termín: „Mohu vám zavolat ve středu v 10?"', highlight: 'Vágní slib → konkrétní termín', source: 'Obchodní metodika', _validated: false },
+    ],
+  },
+
+  block8: {
+    dataBrief: {
+      title: 'Závěrečná reflexe – ukotvení dne',
+      stats: [
+        { label: 'Retence znalostí', value: 'Klesá bez akce', note: 'po 24 h se zapomene odhadem 50–70 % obsahu' },
+        { label: 'Efekt závazku', value: 'Vyšší dodržení', note: 'veřejný závazek zvyšuje pravděpodobnost realizace' },
+        { label: 'Klíč k úspěchu', value: '1 konkrétní akce', note: 'lépe 1 kroková změna než 10 předsevzetí' },
+      ],
+      source: 'Vzdělávací metodika',
+      _validated: false,
+    },
+    insightCards: [
+      { title: 'Jeden konkrétní krok', text: 'Nejúčinnější závazek je jeden konkrétní krok – např. „zítra u prvního klienta zmíním pojištění domácnosti".', highlight: '1 krok > 10 předsevzetí', source: 'Vzdělávací metodika', _validated: false },
+      { title: 'Veřejný závazek funguje', text: 'Závazek sdílený s kolegou má vyšší šanci na dodržení než soukromé předsevzetí.', highlight: 'Sdílený závazek = vyšší dodržení', source: 'Behaviorální výzkum', _validated: false },
+      { title: 'Follow-up je klíčový', text: 'Efekt školení se násobí, pokud do 2 týdnů proběhne krátký follow-up – telefonát, e-mail nebo schůzka s vedoucím.', highlight: 'Follow-up do 2 týdnů', source: 'Vzdělávací metodika', _validated: false },
+    ],
+  },
+};
+
+/* ==========================================================================
+   BLOCK ILLUSTRATIONS — per-block SVG illustrations
+   Simple geometric/abstract flat-style SVGs, stroke only, currentColor
+   ViewBox 200x160, 3-4 shapes per block
+   ========================================================================== */
+export const blockIllustrations = {
+  1: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 160" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 130 Q35 110 60 130 Q85 150 110 130 Q135 110 160 130 Q175 145 190 130" opacity="0.3"/><path d="M10 110 Q35 90 60 110 Q85 130 110 110 Q135 90 160 110 Q175 125 190 110" opacity="0.5"/><path d="M10 90 Q35 70 60 90 Q85 110 110 90 Q135 70 160 90 Q175 105 190 90" opacity="0.7"/><circle cx="100" cy="50" r="20" opacity="0.6"/><line x1="100" y1="30" x2="100" y2="15" opacity="0.4"/></svg>',
+
+  2: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 160" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M60 60 L100 30 L140 60 L140 130 L60 130 Z" opacity="0.5"/><rect x="85" y="95" width="30" height="35" opacity="0.6"/><rect x="70" y="70" width="20" height="18" opacity="0.4"/><rect x="110" y="70" width="20" height="18" opacity="0.4"/><circle cx="45" cy="120" r="12" opacity="0.5"/><circle cx="45" cy="108" r="8" opacity="0.5"/><circle cx="155" cy="120" r="10" opacity="0.4"/><circle cx="155" cy="110" r="7" opacity="0.4"/></svg>',
+
+  3: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 160" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="100,25 110,25 110,55 100,55" opacity="0.6"/><line x1="60" y1="55" x2="140" y2="55" opacity="0.7"/><polygon points="100,55 60,55 55,70" opacity="0.5"/><polygon points="100,55 140,55 145,70" opacity="0.5"/><rect x="50" y="72" width="40" height="30" rx="3" opacity="0.5"/><rect x="110" y="72" width="40" height="30" rx="3" opacity="0.5"/><line x1="100" y1="110" x2="100" y2="140" opacity="0.4"/><line x1="80" y1="140" x2="120" y2="140" opacity="0.4"/></svg>',
+
+  4: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 160" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="20" y="30" width="90" height="50" rx="10" opacity="0.5"/><polygon points="30,80 20,95 45,80" opacity="0.5"/><rect x="90" y="80" width="90" height="50" rx="10" opacity="0.6"/><polygon points="170,130 180,145 155,130" opacity="0.6"/><circle cx="50" cy="55" r="3" opacity="0.4"/><circle cx="65" cy="55" r="3" opacity="0.4"/><circle cx="80" cy="55" r="3" opacity="0.4"/></svg>',
+
+  5: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 160" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="35" y="25" width="130" height="90" rx="6" opacity="0.6"/><rect x="42" y="32" width="116" height="70" rx="2" opacity="0.3"/><line x1="80" y1="115" x2="120" y2="115" opacity="0.5"/><rect x="70" y="115" width="60" height="8" rx="2" opacity="0.4"/><line x1="60" y1="55" x2="90" y2="55" opacity="0.5"/><line x1="60" y1="65" x2="110" y2="65" opacity="0.4"/><line x1="60" y1="75" x2="100" y2="75" opacity="0.4"/><rect x="120" y="50" width="25" height="30" rx="3" opacity="0.5"/></svg>',
+
+  6: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 160" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="30" y1="80" x2="170" y2="80" opacity="0.4"/><circle cx="50" cy="80" r="8" opacity="0.6"/><circle cx="90" cy="80" r="8" opacity="0.6"/><circle cx="130" cy="80" r="8" opacity="0.6"/><circle cx="170" cy="80" r="8" opacity="0.7"/><line x1="50" y1="72" x2="50" y2="50" opacity="0.4"/><line x1="90" y1="72" x2="90" y2="50" opacity="0.4"/><line x1="130" y1="72" x2="130" y2="50" opacity="0.4"/><rect x="35" y="35" width="30" height="15" rx="3" opacity="0.4"/><rect x="75" y="35" width="30" height="15" rx="3" opacity="0.4"/><rect x="115" y="35" width="30" height="15" rx="3" opacity="0.4"/><line x1="50" y1="88" x2="50" y2="110" opacity="0.3"/><rect x="35" y="110" width="30" height="15" rx="3" opacity="0.3"/></svg>',
+
+  7: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 160" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M100 20 L100 50 L120 35 L100 50 L80 35" opacity="0.5"/><path d="M100 50 C100 50 60 60 60 95 C60 130 100 145 100 145 C100 145 140 130 140 95 C140 60 100 50 100 50 Z" opacity="0.6"/><line x1="85" y1="95" x2="95" y2="105" opacity="0.7"/><line x1="95" y1="105" x2="115" y2="85" opacity="0.7"/></svg>',
+
+  8: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 160" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="100" cy="80" r="55" opacity="0.3"/><circle cx="100" cy="80" r="38" opacity="0.4"/><circle cx="100" cy="80" r="20" opacity="0.6"/><circle cx="100" cy="80" r="5" opacity="0.8"/><line x1="155" y1="25" x2="105" y2="75" opacity="0.5"/><polygon points="155,25 140,28 152,40" opacity="0.5"/></svg>',
 };
